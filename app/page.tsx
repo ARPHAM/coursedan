@@ -6,7 +6,7 @@ export default function Home() {
   const [username, setUsername] = useState("");
   const a = [1, 2, 3, 4, 5];
   return (
-    <div>
+    <div className="bg-[#0a092d] text-white">
       <h1>Welcome to Coursedan</h1>
       <p className="font-bold">Tên Đăng nhập:</p>
       <input
