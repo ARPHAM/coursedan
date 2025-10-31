@@ -1,20 +1,14 @@
 "use client";
 import { useState } from "react";
 import Table from "./table";
+import Link from "next/link";
 
 export default function Home() {
-  const [username, setUsername] = useState("");
-  const a = [1, 2, 3, 4, 5];
   return (
-    <div className="bg-[#0a092d] text-white">
-      <h1>Welcome to Coursedan</h1>
-      <p className="font-bold">Tên Đăng nhập:</p>
-      <input
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <Table />
-    </div>
+    <main className="p-8 bg-gray-100 min-h-screen">
+      <Link href="/Login" className="text-blue-500 hover:underline">
+        Go to Login
+      </Link>
+    </main>
   );
 }
