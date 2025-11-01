@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import 'antd/dist/reset.css';
+import "antd/dist/reset.css";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import Header from "@/components/header";
@@ -34,10 +34,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NuqsAdapter>
-          <Header />
-          <NavbarMain />
           <main>{children}</main>
-          <Footer />
         </NuqsAdapter>
       </body>
     </html>
