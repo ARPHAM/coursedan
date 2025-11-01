@@ -4,6 +4,7 @@ import Table from "./table";
 import Link from "next/link";
 import Header from "./components/header";
 import NavbarMain from "./components/navbarMain";
+import BannerCourse from "./components/bannerCourse";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <Link href="/testcolor" className="ml-4 text-blue-500 hover:underline">
         TestColor
       </Link>
+      <BannerCourse className="m-4" />
     </main>
   );
 }
