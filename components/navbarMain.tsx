@@ -1,13 +1,13 @@
-import Link from "next/link"; 
+import Link from "next/link";
 
 export default function NavbarMain() {
   // Đã cập nhật mảng links với 5 khóa học
   const links = [
-    { href: "/khoa-hoc/lap-trinh-web", label: "Lập trình web" },
-    { href: "/khoa-hoc/phan-tich-du-lieu", label: "Phân tích dữ liệu" },
-    { href: "/khoa-hoc/kinh-doanh-so", label: "Kinh doanh số" },
-    { href: "/khoa-hoc/tri-tue-nhan-tao", label: "Trí tuệ nhân tạo" },
-    { href: "/khoa-hoc/thiet-ke-ux-ui", label: "Thiết kế UX/UI" },
+    { href: "/course/lap-trinh-web", label: "Lập trình web" },
+    { href: "/course/phan-tich-du-lieu", label: "Phân tích dữ liệu" },
+    { href: "/course/kinh-doanh-so", label: "Kinh doanh số" },
+    { href: "/course/tri-tue-nhan-tao", label: "Trí tuệ nhân tạo" },
+    { href: "/course/thiet-ke-ux-ui", label: "Thiết kế UX/UI" },
   ];
 
   return (
