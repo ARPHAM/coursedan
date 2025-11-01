@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import SearchIcon from "../icon/search";
 import { useQueryState } from "nuqs";
 
