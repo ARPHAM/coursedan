@@ -1,25 +1,21 @@
-"use client";
-import { useState } from "react";
-import Table from "./table";
 import Link from "next/link";
-import Header from "./components/header";
-import NavbarMain from "./components/navbarMain";
-import BannerCourse from "./components/bannerCourse";
-import Footer from "./components/footer";
+import BannerCourse from "@/components/bannerCourse"; 
 
 export default function Home() {
   return (
-    <main className="bg-gray-100 min-h-screen">
-      <Header />
-      <NavbarMain />
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Chào mừng đến với Coursedan!</h1>
+      
       <Link href="/Login" className="text-blue-500 hover:underline">
         Login
       </Link>
       <Link href="/testcolor" className="ml-4 text-blue-500 hover:underline">
         TestColor
       </Link>
-      <BannerCourse className="m-4" />
-      <Footer />
-    </main>
+
+      <div className="mt-8">
+        <BannerCourse className="m-4" />
+      </div>
+    </div>
   );
 }

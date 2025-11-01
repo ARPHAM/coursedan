@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import 'antd/dist/reset.css';
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+
+import Header from "@/components/header";
+import NavbarMain from "@/components/navbarMain";
+import Footer from "@/components/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,13 +25,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="vi">
-      <body className="flex flex-col min-h-screen bg-white">
-        <NuqsAdapter>{children}</NuqsAdapter>
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <NuqsAdapter>
+          <Header />
+          <NavbarMain />
+          <main>{children}</main>
+          <Footer />
+        </NuqsAdapter>
       </body>
     </html>
   );
