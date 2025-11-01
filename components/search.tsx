@@ -1,5 +1,5 @@
 "use client";
-import SearchIcon from "./icon/search";
+import SearchIcon from "../icon/search";
 import { useQueryState } from "nuqs";
 
 export default function Search({ className }: { className?: string }) {
