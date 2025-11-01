@@ -10,7 +10,6 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <div className="flex rounded-xl shadow-2xl overflow-hidden max-w-4xl w-full bg-white">
-        
         {/* === CỘT BÊN TRÁI (HÌNH ẢNH) === */}
         <div className="hidden lg:block lg:w-1/2 relative">
           {/* Bạn có thể thay đổi src ảnh này */}
@@ -30,8 +29,8 @@ export default function LoginPage() {
           <form className="flex flex-col gap-4">
             {/* --- Email --- */}
             <div>
-              <label 
-                htmlFor="email" 
+              <label
+                htmlFor="email"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
                 Email
@@ -52,8 +51,8 @@ export default function LoginPage() {
 
             {/* --- Password --- */}
             <div>
-              <label 
-                htmlFor="password" 
+              <label
+                htmlFor="password"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
                 Password
@@ -70,8 +69,8 @@ export default function LoginPage() {
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"
                 />
               </div>
-              <Link 
-                href="/forgot-password" 
+              <Link
+                href="/forgot-password"
                 className="text-xs text-purple-600 hover:underline text-right block mt-1"
               >
                 Quên mật khẩu?
@@ -79,12 +78,14 @@ export default function LoginPage() {
             </div>
 
             {/* --- Nút Đăng nhập chính --- */}
-            <button
-              type="submit"
-              className="w-full bg-purple-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-purple-700 transition duration-300"
-            >
-              Đăng nhập
-            </button>
+            <Link href="/">
+              <button
+                type="button"
+                className="w-full bg-purple-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-purple-700 transition duration-300"
+              >
+                Đăng nhập
+              </button>
+            </Link>
           </form>
 
           {/* --- Đường kẻ "hoặc" --- */}
@@ -112,8 +113,8 @@ export default function LoginPage() {
           {/* --- Link Đăng ký --- */}
           <p className="mt-8 text-center text-sm text-gray-600">
             Chưa có tài khoản?{" "}
-            <Link 
-              href="/register" 
+            <Link
+              href="/register"
               className="font-medium text-purple-600 hover:underline"
             >
               Đăng ký ngay

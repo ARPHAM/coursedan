@@ -5,6 +5,7 @@ import Link from "next/link";
 import Header from "./components/header";
 import NavbarMain from "./components/navbarMain";
 import BannerCourse from "./components/bannerCourse";
+import Footer from "./components/footer";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
         TestColor
       </Link>
       <BannerCourse className="m-4" />
+      <Footer />
     </main>
   );
 }
