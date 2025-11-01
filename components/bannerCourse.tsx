@@ -4,6 +4,7 @@ import { Rate } from "antd";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Money from "./money";
 
 export default function BannerCourse({ className }: { className?: string }) {
   const [value, setValue] = useState(2.5);
@@ -30,7 +31,8 @@ export default function BannerCourse({ className }: { className?: string }) {
           <p className="text-[20px]">{value}</p>
           <Rate allowHalf defaultValue={value} onChange={setValue} />
         </div>
-        <Link href="/enroll" className="mt-4 text-blue-500 hover:underline">
+        <Money amount={49.99} />
+        <Link href="/course/1" className="mt-4 text-blue-500 hover:underline">
           Enroll Now
         </Link>
       </div>
