@@ -1,6 +1,6 @@
 "use client";
 
-import BannerCourse from "@/components/bannerCourse";
+import Course from "@/components/course";
 import { useParams } from "next/navigation";
 
 export default function CourseGroupPage() {
@@ -19,9 +19,9 @@ export default function CourseGroupPage() {
           sm:justify-start
         "
       >
-        <BannerCourse />
-        <BannerCourse />
-        <BannerCourse />
+        <Course />
+        <Course />
+        <Course />
       </div>
     </div>
   );

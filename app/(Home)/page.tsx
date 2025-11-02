@@ -1,5 +1,5 @@
 import Link from "next/link";
-import BannerCourse from "@/components/bannerCourse";
+import Course from "@/components/course";
 import NavbarMain from "@/components/navbarMain";
 
 export default function Home() {
@@ -18,8 +18,9 @@ export default function Home() {
           TestColor
         </Link>
 
-        <div className="mt-8">
-          <BannerCourse className="m-4" />
+        <div className="mt-8 flex flex-wrap gap-6">
+          <Course className="m-4" />
+          <Course className="m-4" url="1" />
         </div>
       </div>
     </>

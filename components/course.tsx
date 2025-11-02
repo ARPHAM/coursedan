@@ -6,7 +6,13 @@ import Image from "next/image";
 import Link from "next/link";
 import Money from "./money";
 
-export default function BannerCourse({ className }: { className?: string }) {
+export default function Course({
+  className,
+  url,
+}: {
+  className?: string;
+  url?: string;
+}) {
   const [value, setValue] = useState(4.5);
 
   return (
@@ -43,16 +49,26 @@ export default function BannerCourse({ className }: { className?: string }) {
           <p className="text-sm font-medium text-gray-700">({value})</p>
         </div>
 
-        <div className="mt-3">
-          <Money amount={49.99} />
-        </div>
-
-        <Link
-          href="/course/lap-trinh-web/1"
-          className="mt-4 inline-block bg-blue-600 text-white text-center text-sm font-semibold px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors duration-200"
-        >
-          Enroll Now
-        </Link>
+        {url ? (
+          <Link
+            href={`/student/learn/${url}`}
+            className="mt-4 inline-block bg-blue-600 text-white text-center text-sm font-semibold px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors duration-200"
+          >
+            Học ngay
+          </Link>
+        ) : (
+          <>
+            <div className="mt-3">
+              <Money amount={49.99} />
+            </div>
+            <Link
+              href="/course/lap-trinh-web/1"
+              className="mt-4 inline-block bg-blue-600 text-white text-center text-sm font-semibold px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors duration-200"
+            >
+              Enroll Now
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );
