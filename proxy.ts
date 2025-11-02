@@ -3,20 +3,14 @@ import type { NextRequest } from "next/server";
 import { jwtDecode } from "jwt-decode";
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  console.log("🔒 Proxy running:", pathname);
-
-  const PUBLIC_PATHS = ["/", "/Login", "/register", "/404"];
+  const PUBLIC_PATHS = ["/", "/Login", "/register"];
   if (PUBLIC_PATHS.includes(pathname)) {
-    console.log("🔓 Public path, no auth required.");
     return NextResponse.next();
   }
 
   const token = req.cookies.get("access_token")?.value;
   if (!token) {
-    console.log("🚫 No token found. Redirecting to /Login");
     return NextResponse.redirect(new URL("/Login", req.url));
-  } else {
-    console.log(token);
   }
 
   try {
@@ -37,29 +31,23 @@ export async function proxy(req: NextRequest) {
         ],
       exp: rawPayload.exp,
     };
-    console.log("🔍 Decoded token payload:", payload);
 
     if (payload.exp && Date.now() >= payload.exp * 1000) {
-      console.log("⏰ Token expired. Redirecting to /Login");
       const res = NextResponse.redirect(new URL("/Login", req.url));
       res.cookies.delete("access_token");
       return res;
     }
 
-    // Kiểm tra role
     if (pathname.startsWith("/admin") && payload.role !== "Admin") {
-      console.log("❌ User not admin. Redirecting to /404");
-      return NextResponse.redirect(new URL("/404", req.url));
+      return new NextResponse("Not Found", { status: 404 });
     }
 
     if (pathname.startsWith("/student") && payload.role !== "Student") {
-      console.log("❌ User not student. Redirecting to /404");
-      return NextResponse.redirect(new URL("/404", req.url));
+      return new NextResponse("Not Found", { status: 404 });
     }
 
     return NextResponse.next();
   } catch (err) {
-    console.error("❌ Failed to decode token:", err);
     const res = NextResponse.redirect(new URL("/Login", req.url));
     res.cookies.delete("access_token");
     return res;
