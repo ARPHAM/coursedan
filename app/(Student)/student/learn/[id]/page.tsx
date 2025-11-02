@@ -18,13 +18,22 @@ export default function Page() {
         <div className="aspect-video rounded-lg overflow-hidden shadow-lg">
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/KabeMVHgRLQ?si=HD7ziETNyWIkDuoJ"
+            src="https://www.youtube.com/embed/-jV06pqjUUc?si=HMbpnUd7da03v39Q"
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
           ></iframe>
+          {/* <iframe
+            className="w-full h-full"
+            src="https://www.youtube.com/embed/KabeMVHgRLQ?si=HD7ziETNyWIkDuoJ"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          ></iframe> */}
         </div>
 
         {/* Course info */}
