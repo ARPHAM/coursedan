@@ -1,56 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import axios from "axios";
 import Image from "next/image";
 import { Mail, Lock, Chrome, Facebook, Apple } from "lucide-react";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleLogin = async () => {
-    try {
-      setLoading(true);
-      console.log("🚀 Logging in with:", { email, password });
-
-      const res = await axios.post(
-        "https://coursedan-api.onrender.com/api/auth/login",
-        {
-          email,
-          password,
-        }
-      );
-      const token = res.data?.token;
-      if (!token) throw new Error("No token received");
-
-      document.cookie = `access_token=${token}; path=/;`;
-
-      router.push("/");
-    } catch (error: any) {
-      console.error("❌ Login failed:", error.response?.data || error);
-      alert("Đăng nhập thất bại!");
-    } finally {
-      setLoading(false);
-    }
-  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-8">
       <div className="flex flex-col lg:flex-row rounded-xl shadow-2xl overflow-hidden max-w-5xl w-full bg-white">
+        
+        {/* === CỘT TRÁI: HÌNH ẢNH (Chỉ hiện trên lg) === */}
         <div className="hidden lg:block lg:w-1/2 relative h-96 lg:h-auto">
           <Image
-            src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
-            alt="Login Illustration"
-            fill
-            className="object-cover"
-            priority
-          />
+        src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+        alt="Register Illustration"
+        fill
+        className="object-cover"
+        priority
+/>
+
         </div>
 
+        {/* === CỘT PHẢI: FORM ĐĂNG NHẬP === */}
         <div className="w-full lg:w-1/2 p-6 sm:p-10 lg:p-12">
           <div className="max-w-md mx-auto">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
@@ -59,11 +30,9 @@ export default function LoginPage() {
             <p className="text-gray-600 mb-8">Chào mừng bạn trở lại!</p>
 
             <form className="space-y-5">
+              {/* Email */}
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                   Email
                 </label>
                 <div className="relative">
@@ -75,17 +44,13 @@ export default function LoginPage() {
                     placeholder="ban@email.com"
                     className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
               </div>
 
+              {/* Password */}
               <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                   Mật khẩu
                 </label>
                 <div className="relative">
@@ -97,8 +62,6 @@ export default function LoginPage() {
                     placeholder="••••••••"
                     className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
                     required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
                 <Link
@@ -109,15 +72,16 @@ export default function LoginPage() {
                 </Link>
               </div>
 
+              {/* Nút Đăng nhập */}
               <button
-                type="button"
+                type="submit"
                 className="w-full bg-purple-600 text-white py-2.5 px-4 rounded-lg font-semibold hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition"
-                onClick={handleLogin}
               >
                 Đăng nhập
               </button>
             </form>
 
+            {/* Divider */}
             <div className="relative my-8">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300"></div>
@@ -127,6 +91,7 @@ export default function LoginPage() {
               </div>
             </div>
 
+            {/* Social Login */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <button className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
                 <Chrome className="h-5 w-5 text-red-500" />
@@ -145,10 +110,7 @@ export default function LoginPage() {
             {/* Register Link */}
             <p className="mt-8 text-center text-sm text-gray-600">
               Chưa có tài khoản?{" "}
-              <Link
-                href="/register"
-                className="font-semibold text-purple-600 hover:underline"
-              >
+              <Link href="/register" className="font-semibold text-purple-600 hover:underline">
                 Đăng ký ngay
               </Link>
             </p>
