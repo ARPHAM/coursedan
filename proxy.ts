@@ -50,9 +50,10 @@ export async function proxy(req: NextRequest) {
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    if (pathname.startsWith("/teach") && payload.role !== "Instructor") {
-      return new NextResponse("Not Found", { status: 404 });
-    }
+    if (pathname.startsWith("/teach") && !["Instructor", "Teacher"].includes(payload.role)) {
+  return new NextResponse("Not Found", { status: 404 });
+}
+
 
     return NextResponse.next();
   } catch (err) {
