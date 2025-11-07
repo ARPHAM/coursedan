@@ -42,7 +42,15 @@ export async function proxy(req: NextRequest) {
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    if (pathname.startsWith("/student") && payload.role !== "Student") {
+    if (
+      (pathname.startsWith("/student") ||
+        ["checkout", "/cart"].includes(pathname)) &&
+      payload.role !== "Student"
+    ) {
+      return new NextResponse("Not Found", { status: 404 });
+    }
+
+    if (pathname.startsWith("/teach") && payload.role !== "Instructor") {
       return new NextResponse("Not Found", { status: 404 });
     }
 

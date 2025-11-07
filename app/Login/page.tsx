@@ -30,8 +30,10 @@ export default function LoginPage() {
 
       document.cookie = `access_token=${token}; path=/;`;
       const role = res.data?.roles[0];
-      if (role === "Admin") {
-        router.push("/admin");
+      if (role == "Admin") {
+        router.push("/admin/courses");
+      } else if (role == "Instructor") {
+        router.push("/teach");
       } else {
         router.push("/");
       }
