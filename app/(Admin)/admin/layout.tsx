@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, BookOpenCheck, GraduationCap, LogOut } from "lucide-react";
+import { BarChart3, BookOpenCheck, GraduationCap } from "lucide-react";
 import Image from "next/image";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -18,22 +18,27 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* --- Header --- */}
       <header className="flex justify-between items-center px-8 py-4 bg-white shadow-sm border-b border-gray-200">
-        <div className="flex items-center gap-2">
-          <Image src="/images/logo.png" alt="Logo" width={28} height={28} />
-          <Link href="/" className="text-2xl font-bold text-#0a092d">
-            coursedan
+        {/* Logo */}
+        <div className="flex items-center gap-3">
+          <Image src="/images/logo.png" alt="Logo" width={32} height={32} />
+          <Link
+            href="/"
+            className="text-2xl font-extrabold text-blue-600 tracking-tight"
+          >
+            Coursedan
           </Link>
         </div>
 
+        {/* Menu */}
         <nav className="flex items-center gap-6">
           {menuItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-2 text-sm font-medium px-3 py-1.5 rounded-md transition ${
+              className={`flex items-center gap-2 text-sm font-medium px-3 py-1.5 rounded-md transition-all duration-200 ${
                 pathname === item.href
-                  ? "bg-[#0a092d] text-white"
-                  : "text-gray-700 hover:bg-[#0a092d]/10 hover:text-[#0a092d]"
+                  ? "bg-blue-600 text-white shadow-sm"
+                  : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
               }`}
             >
               {item.icon}
@@ -42,22 +47,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           ))}
         </nav>
 
+        {/* Admin Info */}
         <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-600">Admin User</span>
+          <span className="text-sm text-gray-700 font-medium">Admin User</span>
           <Image
             src="/images/avatar-placeholder.png"
             alt="Admin"
-            width={36}
-            height={36}
+            width={40}
+            height={40}
             className="rounded-full border border-gray-300"
           />
         </div>
       </header>
 
       {/* --- Main Content --- */}
-      <main className="flex-1 p-6">
-        {children}
-      </main>
+      <main className="flex-1 p-8">{children}</main>
     </div>
   );
 }
