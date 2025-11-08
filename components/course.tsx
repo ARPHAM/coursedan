@@ -19,21 +19,17 @@ export default function Course({
     <div
       className={`bg-white text-gray-900 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden w-[200px] flex flex-col ${className}`}
     >
-      <div className="relative">
+      <div className="relative h-[150px] w-full overflow-hidden rounded-lg">
         <Image
           src="https://digitallearning.eletsonline.com/wp-content/uploads/2019/03/Online-courses.jpg"
           alt="Course Banner"
-          width={150}
-          height={40}
-          className="object-cover w-full h-[100px] hover:scale-105 transition-transform duration-300"
+          fill
+          className="object-cover hover:scale-105 transition-transform duration-300"
         />
-        {/* <span className="absolute top-3 left-3 bg-blue-600 text-white text-xs font-semibold px-2 py-1 rounded-md shadow-sm">
-          Hot 🔥
-        </span> */}
       </div>
 
       <div className="flex flex-col flex-1">
-        <div className="font-semibold text-[16px] leading-snug text-gray-800 line-clamp-2">
+        <div className="font-semibold text-[20px] leading-snug text-gray-800 line-clamp-2">
           Learn Next.js with our comprehensive course!
         </div>
 

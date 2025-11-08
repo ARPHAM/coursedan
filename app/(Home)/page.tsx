@@ -45,9 +45,9 @@ export default function Home() {
           profile
         </Link>
 
-        <div className="mt-8 flex flex-wrap gap-6">
-          <Course className="m-4" />
-          <Course className="m-4" url="1" />
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <Course className="w-full" />
+          <Course className="w-full" url="1" />
         </div>
       </div>{" "}
       {/* ✅ Thêm dòng này */}
