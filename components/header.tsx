@@ -1,11 +1,59 @@
-// app/components/header.tsx (Tạo file mới)
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Search, ShoppingCart, Heart, Bell } from "lucide-react";
-
 export default function Header() {
-  const isLoggedIn = true;
+  const [token, setToken] = useState<string | undefined>(undefined);
+  const [payload, setPayload] = useState<object | undefined>(undefined);
+
+  useEffect(() => {
+    const match = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("access_token="));
+    const accessToken = match
+      ? decodeURIComponent(match.split("=")[1])
+      : undefined;
+    setToken(accessToken);
+
+    if (accessToken) {
+      try {
+        const parts = accessToken.split(".");
+        if (parts.length === 3) {
+          const base64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+          const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
+          const jsonPayload = decodeURIComponent(
+            atob(padded)
+              .split("")
+              .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+              .join("")
+          );
+          const rawPayload = JSON.parse(jsonPayload);
+
+          setPayload({
+            id: rawPayload[
+              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+            ],
+            email:
+              rawPayload.email ||
+              rawPayload[
+                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+              ],
+            role:
+              rawPayload.role ||
+              rawPayload[
+                "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+              ],
+            exp: rawPayload.exp,
+          });
+        }
+      } catch (err) {
+        console.error("Failed to decode token payload", err);
+      }
+    }
+  }, []);
+
+  const isLoggedIn = !!token;
 
   return (
     <header className="bg-white shadow-md w-full px-4 sm:px-6 py-4">
@@ -46,11 +94,9 @@ export default function Header() {
           >
             Giảng dạy
           </Link> */}
-
           <Link href="/cart" className="hover:text-purple-600 p-1">
             <ShoppingCart className="w-6 h-6" />
           </Link>
-
           {isLoggedIn ? (
             <>
               <Link
@@ -66,7 +112,9 @@ export default function Header() {
                 <Bell className="w-6 h-6" />
               </Link>
               <div className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold cursor-pointer">
-                HA
+                {payload && typeof payload === "object" && "email" in payload
+                  ? (payload as any).email.charAt(0).toUpperCase()
+                  : "U"}
               </div>
             </>
           ) : (

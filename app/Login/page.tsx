@@ -52,6 +52,7 @@ export default function LoginPage() {
             src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
             alt="Register Illustration"
             fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover"
             priority
           />
@@ -64,7 +65,13 @@ export default function LoginPage() {
             </h1>
             <p className="text-gray-600 mb-8">Chào mừng bạn trở lại!</p>
 
-            <form className="space-y-5">
+            <form
+              className="space-y-5"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleLogin();
+              }}
+            >
               <div>
                 <label
                   htmlFor="email"
@@ -78,6 +85,7 @@ export default function LoginPage() {
                     type="email"
                     id="email"
                     name="email"
+                    autoComplete="username"
                     placeholder="ban@email.com"
                     className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
                     required
@@ -103,6 +111,7 @@ export default function LoginPage() {
                     placeholder="••••••••"
                     className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
                     required
+                    autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
@@ -116,7 +125,7 @@ export default function LoginPage() {
               </div>
 
               <button
-                type="button"
+                type="submit"
                 className="w-full bg-purple-600 text-white py-2.5 px-4 rounded-lg font-semibold hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition"
                 onClick={handleLogin}
                 disabled={loading}

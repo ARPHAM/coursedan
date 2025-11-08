@@ -18,6 +18,7 @@ export default function Home() {
             src="/images/banner.png"
             alt="Banner khóa học"
             fill
+            sizes="100vw"
             className="object-cover"
             priority
           />
@@ -48,7 +49,8 @@ export default function Home() {
           <Course className="m-4" />
           <Course className="m-4" url="1" />
         </div>
-      </div> {/* ✅ Thêm dòng này */}
+      </div>{" "}
+      {/* ✅ Thêm dòng này */}
     </>
   );
 }

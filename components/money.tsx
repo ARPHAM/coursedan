@@ -5,5 +5,5 @@ export default function Money({
   amount: number;
   className?: string;
 }) {
-  return <div className={className}>{amount.toLocaleString()} VND</div>;
+  return <div className={className}>{amount.toLocaleString("vi-VN")} VND</div>;
 }
