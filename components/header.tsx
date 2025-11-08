@@ -6,6 +6,7 @@ import { Search, ShoppingCart, Heart, Bell } from "lucide-react";
 export default function Header() {
   const [token, setToken] = useState<string | undefined>(undefined);
   const [payload, setPayload] = useState<object | undefined>(undefined);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const match = document.cookie
@@ -111,10 +112,36 @@ export default function Header() {
               >
                 <Bell className="w-6 h-6" />
               </Link>
-              <div className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold cursor-pointer">
-                {payload && typeof payload === "object" && "email" in payload
-                  ? (payload as any).email.charAt(0).toUpperCase()
-                  : "U"}
+              <div
+                className="relative inline-block"
+                onMouseEnter={() => setOpen(true)}
+                onMouseLeave={() => setOpen(false)}
+              >
+                <div className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold cursor-pointer">
+                  {payload && typeof payload === "object" && "email" in payload
+                    ? (payload as any).email.charAt(0).toUpperCase()
+                    : "U"}
+                </div>
+                {open && (
+                  <div className="absolute right-0 w-40 bg-white border rounded-lg shadow-lg text-sm z-50">
+                    <Link
+                      href="/student/profile"
+                      className="block px-4 py-2 hover:bg-gray-100 transition"
+                    >
+                      Profile
+                    </Link>
+                    <button
+                      onClick={() => {
+                        document.cookie =
+                          "access_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax;";
+                        window.location.reload();
+                      }}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100 transition"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
               </div>
             </>
           ) : (

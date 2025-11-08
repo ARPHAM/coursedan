@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <NavbarMain />
-      <div className="p-4">
+      <div className="max-w-7xl mx-auto p-6">
         <h1 className="text-2xl font-bold mb-4">
           Chào mừng đến với Coursedan!
         </h1>
@@ -35,7 +35,7 @@ export default function Home() {
         </div>
 
         {/* --- Nội dung trang --- */}
-        <Link href="/login" className="text-blue-500 hover:underline">
+        <Link href="/Login" className="text-blue-500 hover:underline">
           Login
         </Link>
         <Link href="/testcolor" className="ml-4 text-blue-500 hover:underline">
@@ -43,6 +43,15 @@ export default function Home() {
         </Link>
         <Link href="/profile" className="ml-4 text-blue-500 hover:underline">
           profile
+        </Link>
+        <Link href="/teach" className="ml-4 text-blue-500 hover:underline">
+          Teach
+        </Link>
+        <Link
+          href="/admin/courses"
+          className="ml-4 text-blue-500 hover:underline"
+        >
+          Admin
         </Link>
 
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
