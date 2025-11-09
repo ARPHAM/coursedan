@@ -1,44 +1,8 @@
-"use client";
-
-import React from "react";
+import { useRouter } from "next/navigation";
 
 export default function MyCoursesPage() {
-  // 🔹 Dữ liệu giả lập để dựng giao diện
-  const mockCourses = [
-    {
-      id: 1,
-      title: "Lập trình Web với React",
-      description:
-        "Khóa học toàn diện về React từ cơ bản đến nâng cao. Học cách xây dựng ứng dụng web hiện đại.",
-      price: 1500000,
-      lectures: 8,
-      duration: 12,
-      category: "Lập trình",
-      image: "https://placehold.co/600x400?text=React+Course",
-    },
-    {
-      id: 2,
-      title: "Python cho Khoa học Dữ liệu",
-      description:
-        "Khám phá thế giới Data Science với Python. Học pandas, numpy, matplotlib...",
-      price: 2000000,
-      lectures: 10,
-      duration: 15,
-      category: "Data Science",
-      image: "https://placehold.co/600x400?text=Python+Course",
-    },
-    {
-      id: 3,
-      title: "Thiết kế UI/UX với Figma",
-      description:
-        "Làm chủ Figma để tạo ra những thiết kế UX/UI chuyên nghiệp.",
-      price: 1200000,
-      lectures: 6,
-      duration: 8,
-      category: "Thiết kế",
-      image: "https://placehold.co/600x400?text=Figma+Course",
-    },
-  ];
+  const router = useRouter();
+  // ... phần mockCourses giữ nguyên
 
   return (
     <div className="max-w-7xl mx-auto px-8 py-8">
@@ -77,11 +41,26 @@ export default function MyCoursesPage() {
                 <p>Thời lượng: {course.duration} giờ</p>
               </div>
 
+              {/* 🔹 Nút hành động */}
               <div className="flex justify-between mt-3">
-                <button className="text-blue-600 text-sm font-medium hover:underline">
+                <button
+                  className="text-blue-600 text-sm font-medium hover:underline"
+                  onClick={() => router.push(`/teach/course/${course.id}`)}
+                >
+                  Xem chi tiết
+                </button>
+
+                <button
+                  className="text-green-600 text-sm font-medium hover:underline"
+                  onClick={() => router.push(`/teach/edit/${course.id}`)}
+                >
                   Sửa
                 </button>
-                <button className="text-red-600 text-sm font-medium hover:underline">
+
+                <button
+                  className="text-red-600 text-sm font-medium hover:underline"
+                  onClick={() => alert("Xóa khóa học")}
+                >
                   Xóa
                 </button>
               </div>
