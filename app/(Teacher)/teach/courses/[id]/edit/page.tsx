@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { ChevronLeft, Plus } from "lucide-react";
+import { ChevronLeft, Plus, Trash2 } from "lucide-react";
 
 export default function EditCoursePage() {
   const router = useRouter();
@@ -15,66 +15,150 @@ export default function EditCoursePage() {
     level: "",
     price: "",
     imageUrl: "",
-    lessons: [],
-  });
-
-  const [newLesson, setNewLesson] = useState({
-    title: "",
-    description: "",
-    videoUrl: "",
-    duration: "",
+    sections: [],
   });
 
   useEffect(() => {
-    // 🧩 Giả lập dữ liệu ban đầu
+    // 🧩 Giả lập dữ liệu khóa học ban đầu
     setCourse({
       title: "DevOps và Docker",
       description:
-        "Tìm hiểu về DevOps practices và containerization với Docker. Deploy ứng dụng một cách hiệu quả.",
+        "Tìm hiểu DevOps và containerization với Docker. Deploy ứng dụng hiệu quả.",
       category: "DevOps",
       level: "Nâng cao",
       price: "1800000",
-       imageUrl: "/images/course.jpg",
-      lessons: [
+      imageUrl: "/images/course.jpg",
+      sections: [
         {
-          title: "Giới thiệu Docker",
-          description: "Tổng quan về container và image.",
-          videoUrl: "https://example.com/video.mp4",
-          duration: "15:30",
+          id: 1,
+          title: "Phần 1: Giới thiệu Docker",
+          lectures: [
+            {
+              id: 1,
+              title: "Tổng quan về Docker",
+              description: "Container, image và các khái niệm cơ bản.",
+              videoUrl: "https://example.com/docker-intro.mp4",
+              duration: "10:20",
+              isFree: true,
+            },
+            {
+              id: 2,
+              title: "Cài đặt Docker",
+              description: "Hướng dẫn cài đặt trên Windows và Mac.",
+              videoUrl: "https://example.com/install.mp4",
+              duration: "15:00",
+              isFree: true,
+            },
+          ],
         },
       ],
     });
   }, [id]);
 
+  // 🧩 Cập nhật thông tin khóa học cơ bản
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setCourse((prev: any) => ({ ...prev, [name]: value }));
   };
 
-  const handleAddLesson = () => {
-    if (!newLesson.title) return;
-    setCourse((prev: any) => ({
-      ...prev,
-      lessons: [...prev.lessons, newLesson],
-    }));
-    setNewLesson({ title: "", description: "", videoUrl: "", duration: "" });
+  // === Section handlers ===
+  const addSection = () => {
+    setCourse({
+      ...course,
+      sections: [
+        ...course.sections,
+        { id: Date.now(), title: "Phần mới", lectures: [] },
+      ],
+    });
   };
 
-  const handleLessonChange = (index: number, field: string, value: string) => {
-    const updatedLessons = [...course.lessons];
-    updatedLessons[index][field] = value;
-    setCourse((prev: any) => ({ ...prev, lessons: updatedLessons }));
+  const deleteSection = (sectionId: number) => {
+    setCourse({
+      ...course,
+      sections: course.sections.filter((s: any) => s.id !== sectionId),
+    });
   };
 
+  const updateSectionTitle = (sectionId: number, title: string) => {
+    setCourse({
+      ...course,
+      sections: course.sections.map((s: any) =>
+        s.id === sectionId ? { ...s, title } : s
+      ),
+    });
+  };
+
+  // === Lecture handlers ===
+  const addLecture = (sectionId: number) => {
+    setCourse({
+      ...course,
+      sections: course.sections.map((s: any) =>
+        s.id === sectionId
+          ? {
+              ...s,
+              lectures: [
+                ...s.lectures,
+                {
+                  id: Date.now(),
+                  title: "",
+                  description: "",
+                  videoUrl: "",
+                  duration: "",
+                  isFree: false,
+                },
+              ],
+            }
+          : s
+      ),
+    });
+  };
+
+  const deleteLecture = (sectionId: number, lectureId: number) => {
+    setCourse({
+      ...course,
+      sections: course.sections.map((s: any) =>
+        s.id === sectionId
+          ? {
+              ...s,
+              lectures: s.lectures.filter((l: any) => l.id !== lectureId),
+            }
+          : s
+      ),
+    });
+  };
+
+  const updateLecture = (
+    sectionId: number,
+    lectureId: number,
+    field: string,
+    value: string | boolean
+  ) => {
+    setCourse({
+      ...course,
+      sections: course.sections.map((s: any) =>
+        s.id === sectionId
+          ? {
+              ...s,
+              lectures: s.lectures.map((l: any) =>
+                l.id === lectureId ? { ...l, [field]: value } : l
+              ),
+            }
+          : s
+      ),
+    });
+  };
+
+  // 🧩 Gửi lưu dữ liệu
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    alert("✅ Khóa học đã được cập nhật");
+    console.log("Cập nhật khóa học:", course);
+    alert("✅ Đã lưu thay đổi khóa học!");
     router.push("/teach");
   };
 
+  // === Render ===
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      {/* Header */}
+    <div className="max-w-5xl mx-auto p-6">
       <div className="flex items-center gap-2 mb-6">
         <button
           onClick={() => router.back()}
@@ -87,179 +171,163 @@ export default function EditCoursePage() {
       <h1 className="text-2xl font-semibold mb-6">Chỉnh sửa khóa học</h1>
 
       <form onSubmit={handleSubmit} className="space-y-8">
-        {/* Thông tin cơ bản */}
+        {/* === Thông tin cơ bản === */}
         <div className="bg-white border rounded-xl p-6 shadow-sm">
           <h2 className="text-lg font-medium mb-1">Thông tin cơ bản</h2>
           <p className="text-sm text-gray-500 mb-5">
-            Điền thông tin cơ bản về khóa học của bạn
+            Cập nhật thông tin tổng quan khóa học
           </p>
 
           <div className="space-y-4">
-            {/* Tên khóa học */}
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Tên khóa học
-              </label>
-              <input
-                type="text"
-                name="title"
-                value={course.title}
-                onChange={handleChange}
-                className="w-full border rounded-lg px-3 py-2 focus:ring-1 focus:ring-gray-400"
+            <input
+              type="text"
+              name="title"
+              value={course.title}
+              onChange={handleChange}
+              placeholder="Tên khóa học"
+              className="w-full border rounded-lg px-3 py-2"
+            />
+            <textarea
+              name="description"
+              value={course.description}
+              onChange={handleChange}
+              rows={3}
+              placeholder="Mô tả khóa học"
+              className="w-full border rounded-lg px-3 py-2 resize-none"
+            />
+            <input
+              type="text"
+              name="imageUrl"
+              value={course.imageUrl}
+              onChange={handleChange}
+              placeholder="URL ảnh đại diện"
+              className="w-full border rounded-lg px-3 py-2"
+            />
+            {course.imageUrl && (
+              <img
+                src={course.imageUrl}
+                alt="preview"
+                className="w-full h-48 object-cover rounded-lg border"
               />
-            </div>
-
-            {/* Mô tả */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Mô tả</label>
-              <textarea
-                name="description"
-                rows={3}
-                value={course.description}
-                onChange={handleChange}
-                className="w-full border rounded-lg px-3 py-2 focus:ring-1 focus:ring-gray-400 resize-none"
-              ></textarea>
-            </div>
-
-            {/* Danh mục + Cấp độ */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Danh mục</label>
-                <select
-                  name="category"
-                  value={course.category}
-                  onChange={handleChange}
-                  className="w-full border rounded-lg px-3 py-2"
-                >
-                  <option>DevOps</option>
-                  <option>Lập trình Web</option>
-                  <option>Data Science</option>
-                  <option>AI/ML</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Cấp độ</label>
-                <select
-                  name="level"
-                  value={course.level}
-                  onChange={handleChange}
-                  className="w-full border rounded-lg px-3 py-2"
-                >
-                  <option>Cơ bản</option>
-                  <option>Trung cấp</option>
-                  <option>Nâng cao</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Giá */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Giá (VNĐ)</label>
-              <input
-                type="number"
-                name="price"
-                value={course.price}
-                onChange={handleChange}
-                className="w-full border rounded-lg px-3 py-2"
-              />
-            </div>
-
-            {/* Ảnh đại diện */}
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                URL ảnh đại diện
-              </label>
-              <input
-                type="text"
-                name="imageUrl"
-                value={course.imageUrl}
-                onChange={handleChange}
-                className="w-full border rounded-lg px-3 py-2 mb-3"
-              />
-              {course.imageUrl && (
-                <img
-                  src={course.imageUrl}
-                  alt="Course"
-                  className="w-full h-48 object-cover rounded-lg border"
-                />
-              )}
-            </div>
+            )}
           </div>
         </div>
 
-        {/* Nội dung khóa học */}
+        {/* === Nội dung khóa học === */}
         <div className="bg-white border rounded-xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <div>
-              <h2 className="text-lg font-medium">Nội dung khóa học</h2>
-              <p className="text-sm text-gray-500">
-                Thêm các bài giảng cho khóa học
-              </p>
-            </div>
+            <h2 className="text-lg font-medium">Nội dung khóa học</h2>
             <button
               type="button"
-              onClick={handleAddLesson}
+              onClick={addSection}
               className="flex items-center gap-1 px-3 py-1.5 border rounded-md text-sm text-gray-700 hover:bg-gray-100"
             >
-              <Plus size={16} /> Thêm bài
+              <Plus size={16} /> Thêm phần
             </button>
           </div>
 
-          {/* Danh sách bài học */}
-          <div className="space-y-5">
-            {course.lessons.map((lesson: any, index: number) => (
-              <div key={index} className="border rounded-lg p-4">
-                <h3 className="font-medium mb-3">Bài {index + 1}</h3>
+          {course.sections.map((section: any) => (
+            <div key={section.id} className="border rounded-lg p-4 mb-5 bg-gray-50">
+              {/* Tiêu đề section */}
+              <div className="flex justify-between items-center mb-3">
+                <input
+                  type="text"
+                  value={section.title}
+                  onChange={(e) =>
+                    updateSectionTitle(section.id, e.target.value)
+                  }
+                  className="font-medium text-gray-800 w-full border-b px-2 py-1 bg-transparent"
+                />
+                <button
+                  type="button"
+                  onClick={() => deleteSection(section.id)}
+                  className="text-red-500 hover:text-red-700 ml-2"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
 
-                <div className="space-y-3">
-                  <input
-                    type="text"
-                    placeholder="Tiêu đề bài giảng"
-                    value={lesson.title}
-                    onChange={(e) =>
-                      handleLessonChange(index, "title", e.target.value)
-                    }
-                    className="w-full border rounded-lg px-3 py-2"
-                  />
+              {/* Danh sách bài giảng */}
+              {section.lectures.map((lecture: any) => (
+                <div
+                  key={lecture.id}
+                  className="bg-white border rounded-lg p-3 mb-2"
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <input
+                      type="text"
+                      placeholder="Tiêu đề bài giảng"
+                      value={lecture.title}
+                      onChange={(e) =>
+                        updateLecture(section.id, lecture.id, "title", e.target.value)
+                      }
+                      className="w-full border rounded-lg px-3 py-2 mb-2"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => deleteLecture(section.id, lecture.id)}
+                      className="text-red-500 hover:text-red-700 ml-2"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
 
-                  <input
-                    type="text"
+                  <textarea
                     placeholder="Mô tả ngắn"
-                    value={lesson.description}
+                    value={lecture.description}
                     onChange={(e) =>
-                      handleLessonChange(index, "description", e.target.value)
+                      updateLecture(section.id, lecture.id, "description", e.target.value)
                     }
-                    className="w-full border rounded-lg px-3 py-2"
+                    className="w-full border rounded-lg px-3 py-2 mb-2"
                   />
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     <input
                       type="text"
                       placeholder="Video URL"
-                      value={lesson.videoUrl}
+                      value={lecture.videoUrl}
                       onChange={(e) =>
-                        handleLessonChange(index, "videoUrl", e.target.value)
+                        updateLecture(section.id, lecture.id, "videoUrl", e.target.value)
                       }
-                      className="w-full border rounded-lg px-3 py-2"
+                      className="border rounded-lg px-3 py-2"
                     />
                     <input
                       type="text"
-                      placeholder="Thời lượng"
-                      value={lesson.duration}
+                      placeholder="Thời lượng (vd: 05:20)"
+                      value={lecture.duration}
                       onChange={(e) =>
-                        handleLessonChange(index, "duration", e.target.value)
+                        updateLecture(section.id, lecture.id, "duration", e.target.value)
                       }
-                      className="w-full border rounded-lg px-3 py-2"
+                      className="border rounded-lg px-3 py-2"
                     />
                   </div>
+
+                  <label className="mt-2 flex items-center text-sm text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={lecture.isFree}
+                      onChange={(e) =>
+                        updateLecture(section.id, lecture.id, "isFree", e.target.checked)
+                      }
+                      className="mr-2"
+                    />
+                    Học miễn phí
+                  </label>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+
+              <button
+                type="button"
+                onClick={() => addLecture(section.id)}
+                className="mt-2 flex items-center gap-1 text-sm text-gray-600 hover:text-black"
+              >
+                <Plus size={14} /> Thêm bài giảng
+              </button>
+            </div>
+          ))}
         </div>
 
-        {/* Nút hành động */}
-        <div className="flex justify-end gap-3 pt-4">
+        <div className="flex justify-end gap-3">
           <button
             type="button"
             onClick={() => router.back()}
@@ -269,7 +337,7 @@ export default function EditCoursePage() {
           </button>
           <button
             type="submit"
-            className="px-5 py-2 bg-black text-white rounded-md"
+            className="px-5 py-2 bg-black text-white rounded-md hover:bg-gray-800"
           >
             Lưu thay đổi
           </button>
