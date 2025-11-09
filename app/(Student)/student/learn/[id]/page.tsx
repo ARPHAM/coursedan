@@ -76,6 +76,26 @@ export default function Page() {
       ],
     },
   ];
+  const teacher = {
+    name: "Nguyễn Văn Code",
+    description:
+      "Giảng viên Frontend với hơn 10 năm kinh nghiệm trong ngành phát triển web. Chuyên gia về React và JavaScript.",
+    certificate: [
+      "Chứng chỉ React Professional",
+      "Chứng chỉ JavaScript Nâng cao",
+    ],
+    avatarUrl: "https://i.pravatar.cc/150?img=12",
+  };
+  const lecture = {
+    urlVid: "https://www.youtube.com/embed/-jV06pqjUUc?si=HMbpnUd7da03v39Q",
+    // "[comment1[comment2] ]
+    // (comment và trả lời comment)"
+    // "rating[0star: 10; 1star: 11; ...
+    // 5star: 100]"
+    // review_rating
+    // review_comment
+    current_progress: 20,
+  };
 
   const [openSections, setOpenSections] = useState<number[]>([]);
 
@@ -91,7 +111,7 @@ export default function Page() {
         <div className="aspect-video overflow-hidden shadow-lg">
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/-jV06pqjUUc?si=HMbpnUd7da03v39Q"
+            src={lecture.urlVid}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerPolicy="strict-origin-when-cross-origin"
@@ -108,13 +128,13 @@ export default function Page() {
 
           <div className="flex items-center gap-3 border-t border-b py-4">
             <img
-              src="https://i.pravatar.cc/60?img=12"
+              src={teacher.avatarUrl}
               alt="Instructor avatar"
               className="w-12 h-12 rounded-full object-cover"
             />
             <div>
-              <p className="font-semibold">Nguyễn Văn Code</p>
-              <p className="text-sm text-gray-500">Giảng viên Frontend</p>
+              <p className="font-semibold">{teacher.name}</p>
+              <p className="text-sm text-gray-500">{teacher.description}</p>
             </div>
           </div>
 

@@ -44,16 +44,18 @@ export async function proxy(req: NextRequest) {
 
     if (
       (pathname.startsWith("/student") ||
-        ["checkout", "/cart"].includes(pathname)) &&
+        ["/checkout", "/cart"].includes(pathname)) &&
       payload.role !== "Student"
     ) {
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    if (pathname.startsWith("/teach") && !["Instructor", "Teacher"].includes(payload.role)) {
-  return new NextResponse("Not Found", { status: 404 });
-}
-
+    if (
+      pathname.startsWith("/teach") &&
+      !["Instructor", "Teacher"].includes(payload.role)
+    ) {
+      return new NextResponse("Not Found", { status: 404 });
+    }
 
     return NextResponse.next();
   } catch (err) {
