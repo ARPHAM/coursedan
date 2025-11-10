@@ -38,22 +38,19 @@ export async function proxy(req: NextRequest) {
       return res;
     }
 
-    if (pathname.startsWith("/admin") && payload.role !== "Admin") {
+    if (pathname.startsWith("/admin") && !payload.role.includes("Admin")) {
       return new NextResponse("Not Found", { status: 404 });
     }
 
     if (
       (pathname.startsWith("/student") ||
         ["/checkout", "/cart"].includes(pathname)) &&
-      payload.role !== "Student"
+      !payload.role.includes("Student")
     ) {
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    if (
-      pathname.startsWith("/teach") &&
-      !["Instructor", "Teacher"].includes(payload.role)
-    ) {
+    if (pathname.startsWith("/teach") && !payload.role.includes("Instructor")) {
       return new NextResponse("Not Found", { status: 404 });
     }
 

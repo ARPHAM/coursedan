@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import { Search, ShoppingCart, Heart, Bell } from "lucide-react";
 export default function Header() {
   const [token, setToken] = useState<string | undefined>(undefined);
-  const [payload, setPayload] = useState<object | undefined>(undefined);
+  const [payload, setPayload] = useState<
+    { id: string; email: string; role: string[]; exp: string } | undefined
+  >(undefined);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -83,18 +85,14 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-4 shrink-0">
-          {/* <Link
-            href="/business"
-            className="text-sm text-gray-700 hover:text-purple-600 hidden lg:block"
-          >
-            Doanh nghiệp
-          </Link>
-          <Link
-            href="/teach"
-            className="text-sm text-gray-700 hover:text-purple-600 hidden lg:block"
-          >
-            Giảng dạy
-          </Link> */}
+          {payload && payload.role.includes("Instructor") && (
+            <Link
+              href="/teach"
+              className="text-sm text-gray-700 hover:text-purple-600 hidden lg:block"
+            >
+              Giảng dạy
+            </Link>
+          )}
           <Link href="/cart" className="hover:text-purple-600 p-1">
             <ShoppingCart className="w-6 h-6" />
           </Link>
