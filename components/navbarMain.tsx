@@ -6,23 +6,41 @@ export default function NavbarMain() {
   const ListCategory = useListCategory();
   useEffect(() => ListCategory.mutate(), [ListCategory.mutate]);
 
-  if (ListCategory.isPending) return <>Pending...</>;
+  if (ListCategory.isPending)
+    return (
+      <div className="flex w-full shadow-md justify-center animate-pulse">
+        <div className="max-w-full h-12 overflow-x-auto scrollbar-hide">
+          <div className="py-4 flex w-full text-[16px]">
+            {[...Array(10)].map((_, i) => (
+              <div
+                key={i}
+                className={`bg-gray-200 w-40 h-6 ${
+                  i === 0 ? "" : "border-l border-gray-300 pl-4"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
   if (ListCategory.isError) return <>Error...</>;
   return (
-    <div className="bg-white shadow-md p-4 flex justify-between items-center">
-      <div className="flex items-center space-x-4 w-full justify-center">
-        {ListCategory.isSuccess &&
-          ListCategory.data.map((category, index) => (
-            <Link
-              key={category.id}
-              href={`/course/${category.name}`}
-              className={`${
-                index !== 0 ? "border-l border-gray-300 pl-4" : ""
-              } text-gray-700 hover:text-gray-900 hover:underline`}
-            >
-              {category.name}
-            </Link>
-          ))}
+    <div className="flex w-full shadow-md justify-center">
+      <div className="max-w-full h-12 overflow-x-auto scrollbar-hide">
+        <div className="py-4 flex w-full text-[16px]">
+          {ListCategory.isSuccess &&
+            ListCategory.data.map((category, index) => (
+              <Link
+                key={category.id}
+                href={`/courses/${category.name}`}
+                className={`${
+                  index !== 0 ? "border-l border-gray-300" : ""
+                } px-4 text-gray-700 hover:text-gray-900 hover:underline whitespace-nowrap`}
+              >
+                {category.name}
+              </Link>
+            ))}
+        </div>
       </div>
     </div>
   );
