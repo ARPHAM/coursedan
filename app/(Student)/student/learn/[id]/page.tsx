@@ -6,26 +6,35 @@ import Video from "./components/vid";
 import Information from "./components/information";
 import Comment from "./components/comment";
 import Review from "./components/review";
+import { useParams } from "next/navigation";
+import { useCourse } from "./_api/mutation";
 
 export default function Page() {
+  // const id = String(useParams().id);
+  // const course = useCourse(id);
   const [tab, setTab] = useState<"info" | "comment" | "review">("info");
-  const lecture = {
-    urlVid: "https://www.youtube.com/embed/-jV06pqjUUc?si=HMbpnUd7da03v39Q",
-    // "[comment1[comment2] ]
-    // (comment và trả lời comment)"
-    // "rating[0star: 10; 1star: 11; ...
-    // 5star: 100]"
-    // review_rating
-    // review_comment
-    current_progress: 20,
-  };
+  // useEffect(() => course.mutate(), [course.mutate]);
+  // const lecture = {
+  //   urlVid: "https://www.youtube.com/embed/-jV06pqjUUc?si=HMbpnUd7da03v39Q",
+  //   // "[comment1[comment2] ]
+  //   // (comment và trả lời comment)"
+  //   // "rating[0star: 10; 1star: 11; ...
+  //   // 5star: 100]"
+  //   // review_rating
+  //   // review_comment
+  //   current_progress: 20,
+  // };
 
   return (
     <div className="flex-1 pl-4 bg-gray-50">
       <div className="flex flex-col md:flex-row md:items-stretch min-h-0">
         <div className="w-full md:w-2/3">
           <div className="w-full aspect-video">
-            <Video urlVid={lecture.urlVid} className="w-full h-full" />
+            {/* <Video urlVid={course.data.urlVid} className="w-full h-full" /> */}
+            <Video
+              urlVid="https://www.youtube.com/embed/-jV06pqjUUc?si=HMbpnUd7da03v39Q"
+              className="w-full h-full"
+            />
           </div>
         </div>
 

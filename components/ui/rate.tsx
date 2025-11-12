@@ -7,8 +7,9 @@ export default function Rate({ value }: { value: number }) {
       {stars.map((star) => (
         <StarIcon
           key={star}
-          className={`h-4 w-4 ${star <= value ? "text-yellow-500" : ""}`}
-          half={star - 0.5 === value ? true : false}
+          className="h-4 w-4"
+          half={star - 0.5 === value}
+          full={star <= value}
         />
       ))}
     </div>

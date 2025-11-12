@@ -2,8 +2,12 @@ export default function Money({
   amount,
   className,
 }: {
-  amount: number;
+  amount: number | string;
   className?: string;
 }) {
-  return <div className={className}>{amount.toLocaleString("vi-VN")} VND</div>;
+  const str =
+    typeof amount === "number" && amount > 0
+      ? `${amount.toLocaleString("vi-VN")} VND`
+      : amount;
+  return <div className={className}>{str}</div>;
 }

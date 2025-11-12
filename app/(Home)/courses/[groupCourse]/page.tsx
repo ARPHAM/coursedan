@@ -11,7 +11,7 @@ export default function CourseGroupPage() {
   return (
     <div className="p-6">
       <h1 className="font-bold text-3xl mb-6 text-gray-800 pb-4">
-        <Link href="/" className="bg-gray-300 p-4 rounded-[10px]">
+        <Link href="/" className="bg-gray-200 p-4">
           Home
         </Link>
         <span className="mx-2">{">"}</span>

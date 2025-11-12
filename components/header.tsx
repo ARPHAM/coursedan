@@ -59,7 +59,7 @@ export default function Header() {
   const isLoggedIn = !!token;
 
   return (
-    <header className="bg-white shadow-md w-full px-4 sm:px-6 py-4">
+    <header className="bg-white shadow-md w-full px-4 sm:px-6 py-4 border-b-2 border-gray-200">
       <div className="max-w-full mx-auto flex items-center justify-between gap-4">
         <div className="flex items-center gap-4 shrink-0">
           <Link href="/" className="text-2xl font-bold text-purple-600">
@@ -91,6 +91,14 @@ export default function Header() {
               className="text-sm text-gray-700 hover:text-purple-600 hidden lg:block"
             >
               Giảng dạy
+            </Link>
+          )}
+          {payload && payload.role.includes("Student") && (
+            <Link
+              href="/student/my-courses"
+              className="text-sm text-gray-700 hover:text-purple-600 hidden lg:block"
+            >
+              Khóa học của tôi
             </Link>
           )}
           <Link href="/cart" className="hover:text-purple-600 p-1">
