@@ -2,15 +2,13 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "@/config/axios";
 type MyCourse = {
   items: {
-    courseId: number;
+    id: number;
     title: string;
-    imageUrl: string;
     description: string;
+    price: number;
+    imageUrl: string;
     instructor: string;
     rating: number;
-    price: number;
-    progressPercent: number;
-    status: string;
   }[];
   total: number;
   itemsCount: number;
@@ -20,20 +18,20 @@ type MyCourse = {
 };
 
 type Params = {
+  category?: string;
   page?: number;
-  limit?: number | undefined;
 };
 
-export const useMyCourses = () => {
+export const useCourses = () => {
   return useMutation({
     mutationFn: async (params: Params) => {
       const { data }: { data: MyCourse } = await axios.get(
-        "/api/Student/my-courses",
+        "/api/public/courses",
         { params }
       );
       return data;
     },
-    onSuccess: () => {},
+    onSuccess: (res) => {},
     onError: () => {},
   });
 };

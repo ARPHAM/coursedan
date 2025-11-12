@@ -3,11 +3,18 @@
 import Course from "@/components/course";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useCourses } from "./_api/mutation";
+import { useEffect } from "react";
 
 export default function CourseGroupPage() {
   const params = useParams();
-  const courseGroup = params?.groupCourse;
-
+  const category = params?.category
+    ? decodeURIComponent(
+        Array.isArray(params.category) ? params.category[0] : params.category
+      )
+    : "";
+  const courses = useCourses();
+  useEffect(() => courses.mutate({ category }), [category, courses.mutate]);
   return (
     <div className="p-6">
       <h1 className="font-bold text-3xl mb-6 text-gray-800 pb-4">
@@ -15,7 +22,7 @@ export default function CourseGroupPage() {
           Home
         </Link>
         <span className="mx-2">{">"}</span>
-        Khóa học {courseGroup}
+        Khóa học {category}
       </h1>
 
       <div
@@ -24,9 +31,11 @@ export default function CourseGroupPage() {
           sm:justify-start
         "
       >
-        <Course />
-        <Course />
-        <Course />
+        {courses.isError && <>Error</>}
+        {courses.isSuccess &&
+          courses.data.items.map((course) => (
+            <Course key={course.id} data={course} />
+          ))}
       </div>
     </div>
   );

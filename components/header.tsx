@@ -50,9 +50,7 @@ export default function Header() {
             exp: rawPayload.exp,
           });
         }
-      } catch (err) {
-        console.error("Failed to decode token payload", err);
-      }
+      } catch (err) {}
     }
   }, []);
 

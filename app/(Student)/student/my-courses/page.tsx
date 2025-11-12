@@ -1,12 +1,22 @@
 "use client";
 import Course from "@/components/course";
 import Link from "next/link";
-import { useMyCourses } from "./_api/mutation";
 import { useEffect } from "react";
+import { useMyCourses } from "./_api/mutation";
+import FilterByPage from "@/components/FilterByPage";
+import { useQueryState } from "nuqs";
 
 export default function Page() {
+  const page = Number(useQueryState("page")[0]);
   const courses = useMyCourses();
-  useEffect(() => courses.mutate(), [courses.mutate]);
+
+  useEffect(() => {
+    const w = window.innerWidth;
+    const limit = Math.max(Math.floor((w - 24) / 224) * 2, 6);
+    courses.mutate({ limit, page });
+    console.log(page);
+  }, [page]);
+
   return (
     <div className="p-6">
       <h1 className="font-bold text-3xl mb-6 text-gray-800 pb-4">
@@ -17,17 +27,23 @@ export default function Page() {
         Khóa học của tôi
       </h1>
 
-      <div
-        className="
-          flex flex-wrap gap-6 justify-center
-          sm:justify-start
-        "
-      >
+      <div className="flex flex-wrap gap-6 justify-center">
         {courses.isError && <>Error</>}
-        {courses.isSuccess &&
-          courses.data.items.map((course) => (
-            <Course key={course.courseId} data={course} learn />
-          ))}
+        {courses.isSuccess && courses.data.items.length ? (
+          <>
+            {courses.data.items.map((course) => (
+              <Course key={course.courseId} data={course} learn />
+            ))}
+            <div className="flex w-full justify-end">
+              <FilterByPage
+                name="page"
+                pageCount={courses.data?.totalPages || 1}
+              />
+            </div>
+          </>
+        ) : (
+          <>No results</>
+        )}
       </div>
     </div>
   );

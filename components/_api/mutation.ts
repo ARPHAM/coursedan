@@ -15,11 +15,7 @@ export const useListCategory = () => {
       );
       return data;
     },
-    onSuccess: () => {
-      console.log("Haizz success");
-    },
-    onError: () => {
-      console.log("Haizz error");
-    },
+    onSuccess: () => {},
+    onError: () => {},
   });
 };

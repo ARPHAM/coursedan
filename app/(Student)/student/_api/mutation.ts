@@ -8,11 +8,7 @@ export const useCheck = () => {
     mutationFn: async () => {
       return axios.get("api/Student/info");
     },
-    onSuccess: (res) => {
-      console.log("Haizz success");
-    },
-    onError: () => {
-      console.log("Haizz error");
-    },
+    onSuccess: (res) => {},
+    onError: () => {},
   });
 };

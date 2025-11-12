@@ -1,7 +1,6 @@
 "use client";
 
 import Rate from "@/components/ui/rate";
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Money from "./money";
@@ -14,25 +13,25 @@ export default function Course({
   className?: string;
   learn?: boolean;
   data?: {
-    courseId: number;
+    courseId?: number;
+    id?: number;
     title: string;
     imageUrl: string;
     description: string;
     instructor: string;
-    rating: string;
+    rating: number;
     price: number;
-    progressPercent: number;
-    status: string;
+    progressPercent?: number;
+    status?: string;
   };
 }) {
-  console.log(data);
   return (
     <Link
       className={`bg-white text-gray-900 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden w-[200px] flex flex-col ${className}`}
       href={
         learn
-          ? `/student/learn/${data?.courseId || 0}`
-          : `/course/${data?.courseId || 0}`
+          ? `/student/learn/${data?.courseId || data?.id || 0}`
+          : `/course/${data?.courseId || data?.id || 0}`
       }
     >
       <div className="relative h-[150px] w-full overflow-hidden rounded-lg">

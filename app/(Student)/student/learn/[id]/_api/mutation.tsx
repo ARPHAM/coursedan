@@ -33,14 +33,9 @@ export const useCourse = (id: string) => {
       const { data }: { data: Course } = await axios.get(
         `/api/Student/${id}/learn`
       );
-      console.log(data);
       return data;
     },
-    onSuccess: (res) => {
-      console.log("Haizz success", res);
-    },
-    onError: () => {
-      console.log("Haizz error");
-    },
+    onSuccess: (res) => {},
+    onError: () => {},
   });
 };

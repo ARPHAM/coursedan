@@ -16,7 +16,6 @@ export default function LoginPage() {
   const handleLogin = async () => {
     try {
       setLoading(true);
-      console.log("🚀 Logging in with:", { email, password });
 
       const res = await axios.post(
         "https://coursedan-api.onrender.com/api/auth/login",
@@ -38,7 +37,6 @@ export default function LoginPage() {
         router.push("/");
       }
     } catch (error: any) {
-      console.error("❌ Login failed:", error.response?.data || error);
       alert("Đăng nhập thất bại!");
     } finally {
       setLoading(false);
