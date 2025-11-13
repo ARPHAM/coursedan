@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const PUBLIC_PATHS = ["/", "/Login", "/register"];
-  if (PUBLIC_PATHS.includes(pathname)) {
+  if (PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/images")) {
     return NextResponse.next();
   }
 

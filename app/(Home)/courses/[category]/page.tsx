@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useCourses } from "../../_api/mutation";
 import { useEffect } from "react";
+import FilterByPage from "@/components/FilterByPage";
 
 export default function CourseGroupPage() {
   const params = useParams();
@@ -25,17 +26,23 @@ export default function CourseGroupPage() {
         Khóa học {category}
       </h1>
 
-      <div
-        className="
-          flex flex-wrap gap-6 justify-center
-          sm:justify-start
-        "
-      >
+      <div className="flex flex-wrap gap-6 justify-center">
         {courses.isError && <>Error</>}
-        {courses.isSuccess &&
-          courses.data.items.map((course) => (
-            <Course key={course.id} data={course} />
-          ))}
+        {courses.isSuccess && courses.data.items.length ? (
+          <>
+            {courses.data.items.map((course) => (
+              <Course key={course.id} data={course} />
+            ))}
+            <div className="flex w-full justify-end">
+              <FilterByPage
+                name="page"
+                pageCount={courses.data?.totalPages || 1}
+              />
+            </div>
+          </>
+        ) : (
+          <>No results</>
+        )}
       </div>
     </div>
   );

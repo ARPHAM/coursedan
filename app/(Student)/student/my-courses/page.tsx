@@ -23,8 +23,7 @@ export default function Page() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   const courses = useMyCourses();
-
-  useEffect(() => courses.mutate({ limit, page }), [page]);
+  useEffect(() => courses.mutate({ limit, page }), [page, limit]);
 
   return (
     <div className="p-6">
