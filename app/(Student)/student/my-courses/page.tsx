@@ -1,20 +1,30 @@
 "use client";
 import Course from "@/components/course";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMyCourses } from "./_api/mutation";
 import FilterByPage from "@/components/FilterByPage";
 import { useQueryState } from "nuqs";
 
 export default function Page() {
   const page = Number(useQueryState("page")[0]);
-  const courses = useMyCourses();
+  const [limit, setLimit] = useState(6);
 
   useEffect(() => {
-    const w = window.innerWidth;
-    const limit = Math.max(Math.floor((w - 24) / 224) * 2, 6);
-    courses.mutate({ limit, page });
-  }, [page]);
+    function getLimit() {
+      const w = window.innerWidth;
+      return Math.max(Math.floor((w - 24) / 224) * 2, 6);
+    }
+
+    setLimit(getLimit());
+
+    const handleResize = () => setLimit(getLimit());
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  const courses = useMyCourses();
+
+  useEffect(() => courses.mutate({ limit, page }), [page]);
 
   return (
     <div className="p-6">

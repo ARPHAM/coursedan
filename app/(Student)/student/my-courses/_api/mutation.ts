@@ -20,8 +20,12 @@ type MyCourse = {
 };
 
 type Params = {
+  category?: string;
+  sortBy?: string;
+  sortField?: string;
+  search?: string;
   page?: number;
-  limit?: number | undefined;
+  limit?: number;
 };
 
 export const useMyCourses = () => {

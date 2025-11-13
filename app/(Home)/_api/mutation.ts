@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "@/config/axios";
+import { cleanObject } from "@/app/utils/cleanObject";
 type MyCourse = {
   items: {
     id: number;
@@ -19,7 +20,11 @@ type MyCourse = {
 
 type Params = {
   category?: string;
+  sortBy?: string;
+  sortField?: string;
+  search?: string;
   page?: number;
+  limit?: number;
 };
 
 export const useCourses = () => {
@@ -27,11 +32,11 @@ export const useCourses = () => {
     mutationFn: async (params: Params) => {
       const { data }: { data: MyCourse } = await axios.get(
         "/api/public/courses",
-        { params }
+        { params: cleanObject(params) }
       );
       return data;
     },
-    onSuccess: (res) => {},
+    onSuccess: () => {},
     onError: () => {},
   });
 };
