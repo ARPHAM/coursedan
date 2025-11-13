@@ -15,7 +15,7 @@ export default function Home() {
 
   useEffect(() => {
     function getLimit() {
-      const w = Math.min(window.innerWidth, 1028);
+      const w = Math.min(window.innerWidth, 1280);
       return Math.max(Math.floor((w - 8) / 216) * 2, 6);
     }
 
