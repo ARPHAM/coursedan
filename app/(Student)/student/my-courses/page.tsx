@@ -14,7 +14,6 @@ export default function Page() {
     const w = window.innerWidth;
     const limit = Math.max(Math.floor((w - 24) / 224) * 2, 6);
     courses.mutate({ limit, page });
-    console.log(page);
   }, [page]);
 
   return (
