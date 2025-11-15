@@ -60,14 +60,8 @@ export default function Header() {
     <header className="bg-white w-full px-4 sm:px-6 py-4 border-b-2 border-gray-200">
       <div className="max-w-full mx-auto flex items-center justify-between gap-4">
         <div className="flex items-center gap-4 shrink-0">
-          <Link href="/" className="text-2xl font-bold text-purple-600">
+          <Link href="/" className="text-2xl font-bold text-blue-600">
             coursedan
-          </Link>
-          <Link
-            href="/categories"
-            className="text-sm text-gray-700 hover:text-purple-600 hidden md:block"
-          >
-            Khám phá
           </Link>
         </div>
 
@@ -78,7 +72,7 @@ export default function Header() {
           <input
             type="text"
             placeholder="Tìm kiếm nội dung bất kỳ"
-            className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-full bg-gray-50 focus:border-purple-500 focus:ring-purple-500 outline-none"
+            className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-full bg-gray-50 focus:border-blue-500 focus:ring-blue-500 outline-none"
           />
         </div>
 
@@ -86,7 +80,7 @@ export default function Header() {
           {payload && payload.role.includes("Instructor") && (
             <Link
               href="/teach"
-              className="text-sm text-gray-700 hover:text-purple-600 hidden lg:block"
+              className="text-sm text-gray-700 hover:text-blue-600 hidden lg:block"
             >
               Giảng dạy
             </Link>
@@ -94,25 +88,25 @@ export default function Header() {
           {payload && payload.role.includes("Student") && (
             <Link
               href="/student/my-courses"
-              className="text-sm text-gray-700 hover:text-purple-600 hidden lg:block"
+              className="text-sm text-gray-700 hover:text-blue-600 hidden lg:block"
             >
               Khóa học của tôi
             </Link>
           )}
-          <Link href="/cart" className="hover:text-purple-600 p-1">
+          <Link href="/cart" className="hover:text-blue-600 p-1">
             <ShoppingCart className="w-6 h-6" />
           </Link>
           {isLoggedIn ? (
             <>
               <Link
                 href="/wishlist"
-                className="hover:text-purple-600 p-1 hidden sm:block"
+                className="hover:text-blue-600 p-1 hidden sm:block"
               >
                 <Heart className="w-6 h-6" />
               </Link>
               <Link
                 href="/notifications"
-                className="hover:text-purple-600 p-1 hidden sm:block"
+                className="hover:text-blue-600 p-1 hidden sm:block"
               >
                 <Bell className="w-6 h-6" />
               </Link>
