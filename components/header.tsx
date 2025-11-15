@@ -8,7 +8,8 @@ export default function Header() {
   const [payload, setPayload] = useState<
     { id: string; email: string; role: string[]; exp: string } | undefined
   >(undefined);
-  const [open, setOpen] = useState(false);
+  const [openNotification, setOpenNotification] = useState(false);
+  const [openSetting, setOpenSetting] = useState(false);
 
   useEffect(() => {
     const match = document.cookie
@@ -93,34 +94,50 @@ export default function Header() {
               Khóa học của tôi
             </Link>
           )}
-          <Link href="/cart" className="hover:text-blue-600 p-1">
-            <ShoppingCart className="w-6 h-6" />
-          </Link>
+
           {isLoggedIn ? (
             <>
-              <Link
-                href="/wishlist"
-                className="hover:text-blue-600 p-1 hidden sm:block"
-              >
-                <Heart className="w-6 h-6" />
-              </Link>
-              <Link
-                href="/notifications"
-                className="hover:text-blue-600 p-1 hidden sm:block"
-              >
-                <Bell className="w-6 h-6" />
+              <Link href="/student/cart" className="hover:text-blue-600 p-1">
+                <ShoppingCart className="w-6 h-6" />
               </Link>
               <div
+                className="relative hover:text-blue-600 p-1 hidden sm:block"
+                onMouseEnter={() => setOpenNotification(true)}
+                onMouseLeave={() => setOpenNotification(false)}
+              >
+                <Bell className="w-6 h-6" />
+                {openNotification && (
+                  <div className="absolute right-0 w-40 bg-white border rounded-lg shadow-lg text-sm z-50">
+                    <Link
+                      href="/student/profile"
+                      className="block px-4 py-2 hover:bg-gray-100 transition"
+                    >
+                      Profile
+                    </Link>
+                    <button
+                      onClick={() => {
+                        document.cookie =
+                          "access_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax;";
+                        window.location.reload();
+                      }}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100 transition"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+              <div
                 className="relative inline-block"
-                onMouseEnter={() => setOpen(true)}
-                onMouseLeave={() => setOpen(false)}
+                onMouseEnter={() => setOpenSetting(true)}
+                onMouseLeave={() => setOpenSetting(false)}
               >
                 <div className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold cursor-pointer">
                   {payload && typeof payload === "object" && "email" in payload
                     ? (payload as any).email.charAt(0).toUpperCase()
                     : "U"}
                 </div>
-                {open && (
+                {openSetting && (
                   <div className="absolute right-0 w-40 bg-white border rounded-lg shadow-lg text-sm z-50">
                     <Link
                       href="/student/profile"
