@@ -13,7 +13,8 @@ export const useInfoStudent = () => {
   return useQuery<Info>({
     queryKey: ["InfoStudent"],
     queryFn: async () => {
-      return await axios.get("/api/Student/info");
+      const res = await axios.get("/api/Student/info");
+      return res.data;
     },
     placeholderData: keepPreviousData,
   });
