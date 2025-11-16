@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import axios from "@/config/axios";
 
 export type Info = {
@@ -10,9 +10,11 @@ export type Info = {
 };
 
 export const useInfoStudent = () => {
-  return useMutation<Info>({
-    mutationFn: async () => {
+  return useQuery<Info>({
+    queryKey: ["InfoStudent"],
+    queryFn: async () => {
       return await axios.get("/api/Student/info");
     },
+    placeholderData: keepPreviousData,
   });
 };

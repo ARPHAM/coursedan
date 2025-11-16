@@ -2,7 +2,7 @@
 import Course from "@/components/course";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { useMyCourses } from "./_api/mutation";
+import { useMyCourses } from "./_api/queries";
 import FilterByPage from "@/components/FilterByPage";
 import { useQueryState } from "nuqs";
 
@@ -22,8 +22,7 @@ export default function Page() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const courses = useMyCourses();
-  useEffect(() => courses.mutate({ limit, page }), [page, limit]);
+  const courses = useMyCourses({ limit, page });
 
   return (
     <div className="p-6">

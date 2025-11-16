@@ -3,7 +3,7 @@
 import Course from "@/components/course";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useCourses } from "../../_api/queries";
+import { useListCourses } from "../../_api/queries";
 import { useEffect } from "react";
 import FilterByPage from "@/components/FilterByPage";
 
@@ -14,8 +14,7 @@ export default function CourseGroupPage() {
         Array.isArray(params.category) ? params.category[0] : params.category
       )
     : "";
-  const courses = useCourses();
-  useEffect(() => courses.mutate({ category }), [category, courses.mutate]);
+  const courses = useListCourses({ category });
   return (
     <div className="p-6">
       <h1 className="font-bold text-3xl mb-6 text-gray-800 pb-4">

@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "@/config/axios";
 type Course = {
   id: number;
@@ -28,11 +28,10 @@ type Course = {
 };
 
 export const useCourse = (id: string) => {
-  return useMutation<Course>({
-    mutationFn: async () => {
+  return useQuery<Course>({
+    queryKey: ["Course", id],
+    queryFn: async () => {
       return await axios.get(`/api/Student/${id}/learn`);
     },
-    onSuccess: () => {},
-    onError: () => {},
   });
 };

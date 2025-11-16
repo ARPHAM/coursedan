@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import axios from "@/config/axios";
 import { cleanObject } from "@/app/utils/cleanObject";
 type MyCourse = {
@@ -27,15 +27,15 @@ type Params = {
   limit?: number;
 };
 
-export const useCourses = () => {
-  return useMutation<MyCourse, "", Params>({
-    mutationFn: async (params) => {
+export const useListCourses = (params: Params) => {
+  return useQuery<MyCourse>({
+    queryKey: ["ListCategory", params],
+    queryFn: async () => {
       const res = await axios.get("/api/public/courses", {
         params: cleanObject(params),
       });
       return res.data;
     },
-    onSuccess: () => {},
-    onError: () => {},
+    placeholderData: keepPreviousData,
   });
 };

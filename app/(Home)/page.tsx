@@ -5,7 +5,7 @@ import Course from "@/components/course";
 import NavbarMain from "@/components/navbarMain";
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
-import { useCourses } from "./_api/queries";
+import { useListCourses } from "./_api/queries";
 import FilterByPage from "@/components/FilterByPage";
 
 export default function Home() {
@@ -26,12 +26,8 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const courses = useCourses();
+  const courses = useListCourses({});
 
-  useEffect(
-    () => courses.mutate({ limit, page, search }),
-    [limit, page, search]
-  );
   if (courses.isSuccess) {
     return (
       <>
