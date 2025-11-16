@@ -1,10 +1,8 @@
 "use client";
 import Link from "next/link";
-import { useListCategory } from "./_api/mutation";
-import { useEffect } from "react";
+import { useListCategory } from "./_api/queries";
 export default function NavbarMain() {
   const ListCategory = useListCategory();
-  useEffect(() => ListCategory.mutate(), [ListCategory.mutate]);
 
   if (ListCategory.isPending)
     return (

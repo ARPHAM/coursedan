@@ -1,19 +1,31 @@
-import { useMutation } from "@tanstack/react-query";
+import {
+  UseMutationResult,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 import axios from "@/config/axios";
 
-type ListCategory = {
-  id: number;
-  name: string;
-}[];
+import { toast } from "@/components/ui/use-toast";
 
-export const useListCategory = () => {
-  return useMutation<ListCategory>({
-    mutationFn: async () => {
-      const res = await axios.get("/api/public/courses-category");
-      return res.data;
+import { GroupDto } from "./validations";
+
+export const useCreateGroup = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: GroupDto) => {
+      return axios.post("/admin/group", {
+        ...data,
+      });
     },
-    onSuccess: () => {},
-    onError: () => {},
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["useGroups"] });
+      toast({ description: "Group created successfully!" });
+    },
+    onError: (e: any) => {
+      if (e.response?.data?.message)
+        toast({ description: e.response.data.message, variant: "destructive" });
+    },
   });
 };
