@@ -1,4 +1,12 @@
+"use client";
+
+import { useParams } from "next/navigation";
+import { useCourse } from "../_api/queries";
+
 export default function Information() {
+  const params = useParams();
+  const id = String(params.id);
+  const course = useCourse(id);
   const teacher = {
     name: "Nguyễn Văn Code",
     description:
