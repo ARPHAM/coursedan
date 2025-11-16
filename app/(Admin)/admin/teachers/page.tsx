@@ -46,6 +46,13 @@ export default function TeacherRequestsPage() {
   const [approveLoading, setApproveLoading] = useState<number | null>(null); // id đang duyệt
   const [approveError, setApproveError] = useState<string | null>(null);
 
+  // Reject state
+  const [rejectLoading, setRejectLoading] = useState<number | null>(null);
+  const [rejectError, setRejectError] = useState<string | null>(null);
+  const [rejectOpen, setRejectOpen] = useState<boolean>(false);
+  const [rejectId, setRejectId] = useState<number | null>(null);
+  const [rejectReason, setRejectReason] = useState<string>("");
+
   useEffect(() => {
     const fetchRequests = async () => {
       try {
@@ -147,6 +154,80 @@ export default function TeacherRequestsPage() {
     }
   };
 
+  const openReject = (id: number) => {
+    setRejectId(id);
+    setRejectReason("");
+    setRejectError(null);
+    setRejectOpen(true);
+  };
+
+  const submitReject = async () => {
+    if (!rejectId) return;
+    try {
+      setRejectLoading(rejectId);
+      setRejectError(null);
+      const match = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("access_token="));
+      const accessToken = match ? decodeURIComponent(match.split("=")[1]) : undefined;
+      if (!accessToken) throw new Error("Thiếu token");
+
+      const endpoint = `https://coursedan-api.onrender.com/api/admin/instructor-requests/${rejectId}/reject`;
+
+      // Try with different payload shapes to avoid 400 due to validation differences
+      const attempts = [
+        { method: "POST", body: { rejectReason } },
+        { method: "POST", body: { reason: rejectReason } },
+        { method: "PATCH", body: { rejectReason } },
+      ];
+
+      let lastError: any = null;
+      let data: any = null;
+      for (const attempt of attempts) {
+        try {
+          const res = await fetch(endpoint, {
+            method: attempt.method,
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(attempt.body),
+          });
+          if (res.ok) {
+            data = await res.json();
+            lastError = null;
+            break;
+          } else {
+            let detail = "";
+            try {
+              const errJson = await res.json();
+              detail = errJson?.message || errJson?.error || JSON.stringify(errJson);
+            } catch {
+              detail = await res.text();
+            }
+            lastError = new Error(`HTTP ${res.status} – ${detail || "Từ chối thất bại"}`);
+          }
+        } catch (err) {
+          lastError = err;
+        }
+      }
+
+      if (lastError) throw lastError;
+
+      // Loại yêu cầu khỏi danh sách
+      setRequests((prev) => prev.filter((r) => r.id !== rejectId));
+      // Đóng chi tiết nếu đang mở cho id này
+      if (detail?.id === rejectId) setDetailOpen(false);
+      setRejectOpen(false);
+      alert(`Đã từ chối yêu cầu #${data?.requestId ?? rejectId} – lý do: ${data?.rejectReason || data?.reason || rejectReason}`);
+    } catch (err: any) {
+      setRejectError(err?.message ?? "Lỗi khi từ chối");
+    } finally {
+      setRejectLoading(null);
+    }
+  };
+
   const formatDate = (s?: string) => {
     if (!s) return "";
     const d = new Date(s);
@@ -221,7 +302,10 @@ export default function TeacherRequestsPage() {
                       >
                         {approveLoading === req.id ? "Đang duyệt..." : "Phê duyệt"}
                       </button>
-                      <button className="px-3 py-1 text-xs rounded-md bg-red-50 text-red-600 hover:bg-red-100">
+                      <button
+                        onClick={() => openReject(req.id)}
+                        className="px-3 py-1 text-xs rounded-md bg-red-50 text-red-600 hover:bg-red-100"
+                      >
                         Từ chối
                       </button>
                     </div>
@@ -352,12 +436,62 @@ export default function TeacherRequestsPage() {
                 >
                   {approveLoading === detail?.id ? "Đang duyệt..." : "Phê duyệt"}
                 </button>
-                <button className="px-3 py-1 text-xs rounded-md bg-red-50 text-red-600 hover:bg-red-100">Từ chối</button>
+                <button
+                  onClick={() => detail && openReject(detail.id)}
+                  className="px-3 py-1 text-xs rounded-md bg-red-50 text-red-600 hover:bg-red-100"
+                >
+                  Từ chối
+                </button>
               </div>
             </div>
           ) : (
             <p className="text-gray-600">Không có dữ liệu chi tiết</p>
           )}
+        </div>
+      </div>
+    )}
+    {rejectOpen && (
+      <div
+        className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center"
+        onClick={() => setRejectOpen(false)}
+      >
+        <div
+          className="bg-white w-full max-w-md rounded-xl shadow-lg p-6 relative"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={() => setRejectOpen(false)}
+            className="absolute top-3 right-3 text-gray-600 hover:text-gray-900"
+            aria-label="Đóng"
+          >
+            ✕
+          </button>
+          <h2 className="text-lg font-semibold mb-4">Từ chối yêu cầu giảng viên</h2>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Lý do từ chối</label>
+          <textarea
+            value={rejectReason}
+            onChange={(e) => setRejectReason(e.target.value)}
+            placeholder="Nhập lý do..."
+            className="w-full h-28 border rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-200"
+          />
+          {rejectError && (
+            <p className="mt-2 text-sm text-red-600">{rejectError}</p>
+          )}
+          <div className="mt-4 flex items-center justify-end gap-2">
+            <button
+              onClick={() => setRejectOpen(false)}
+              className="px-3 py-1 text-xs rounded-md border hover:bg-gray-50"
+            >
+              Hủy
+            </button>
+            <button
+              onClick={submitReject}
+              disabled={!rejectReason.trim() || rejectLoading === rejectId}
+              className="px-3 py-1 text-xs rounded-md bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-50"
+            >
+              {rejectLoading === rejectId ? "Đang từ chối..." : "Xác nhận từ chối"}
+            </button>
+          </div>
         </div>
       </div>
     )}
