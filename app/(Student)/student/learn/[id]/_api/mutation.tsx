@@ -28,14 +28,11 @@ type Course = {
 };
 
 export const useCourse = (id: string) => {
-  return useMutation({
+  return useMutation<Course>({
     mutationFn: async () => {
-      const { data }: { data: Course } = await axios.get(
-        `/api/Student/${id}/learn`
-      );
-      return data;
+      return await axios.get(`/api/Student/${id}/learn`);
     },
-    onSuccess: (res) => {},
+    onSuccess: () => {},
     onError: () => {},
   });
 };

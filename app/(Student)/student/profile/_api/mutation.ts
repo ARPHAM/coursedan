@@ -12,8 +12,7 @@ export type Info = {
 export const useInfoStudent = () => {
   return useMutation<Info>({
     mutationFn: async () => {
-      const { data } = await axios.get<Info>("/api/Student/info");
-      return data;
+      return await axios.get("/api/Student/info");
     },
   });
 };

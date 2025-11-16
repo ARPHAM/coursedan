@@ -8,7 +8,7 @@ export const useCheck = () => {
     mutationFn: async () => {
       return axios.get("api/Student/info");
     },
-    onSuccess: (res) => {},
+    onSuccess: () => {},
     onError: () => {},
   });
 };

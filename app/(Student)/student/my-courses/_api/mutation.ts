@@ -29,13 +29,9 @@ type Params = {
 };
 
 export const useMyCourses = () => {
-  return useMutation({
-    mutationFn: async (params: Params) => {
-      const { data }: { data: MyCourse } = await axios.get(
-        "/api/Student/my-courses",
-        { params }
-      );
-      return data;
+  return useMutation<MyCourse, "", Params>({
+    mutationFn: async (params) => {
+      return await axios.get("/api/Student/my-courses", { params });
     },
     onSuccess: () => {},
     onError: () => {},
