@@ -23,7 +23,7 @@ export default function Page() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   const courses = useMyCourses({ limit, page });
-
+  console.log(limit);
   return (
     <div className="p-6">
       <h1 className="font-bold text-3xl mb-6 text-gray-800 pb-4">
@@ -36,7 +36,7 @@ export default function Page() {
 
       <div className="flex flex-wrap gap-6 justify-center">
         {courses.isError && <>Error</>}
-        {courses.isSuccess && courses.data.items.length ? (
+        {courses.data && courses.data.items.length ? (
           <>
             {courses.data.items.map((course) => (
               <Course key={course.courseId} data={course} learn />

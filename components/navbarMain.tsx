@@ -21,9 +21,7 @@ export default function NavbarMain() {
         </div>
       </div>
     );
-  if (ListCategory.isError) return <>Error...</>;
-  if (ListCategory.isSuccess) {
-    console.log(ListCategory.data);
+  if (ListCategory.data) {
     return (
       <div className="flex w-full shadow-md justify-center">
         <div className="max-w-full h-12 overflow-x-auto scrollbar-hide">

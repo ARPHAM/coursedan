@@ -32,7 +32,8 @@ export const useMyCourses = (params: Params) => {
   return useQuery<MyCourse>({
     queryKey: ["ListMyCourses", params],
     queryFn: async (params) => {
-      return await axios.get("/api/Student/my-courses", { params });
+      const res = await axios.get("/api/Student/my-courses", { params });
+      return res.data;
     },
     placeholderData: keepPreviousData,
   });

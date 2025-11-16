@@ -1,15 +1,19 @@
 "use client";
 import { Rate } from "antd";
 import { useState } from "react";
+import { useCourseInfo } from "./_api/queries";
+import { useParams } from "next/navigation";
 
 export default function CourseDetailPage() {
+  const params = useParams();
+  const id = String(params.id);
+  const courseInfo = useCourseInfo(id);
   const [value, setValue] = useState(4.5);
-
+  console.log("id", id, "courseInfo:", courseInfo.data);
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800">
-      {/* === HEADER SECTION === */}
-      <section className="bg-gray-900 text-white py-10 px-6 flex flex-col md:flex-row justify-center gap-10">
-        {/* LEFT */}
+      <div>{courseInfo.data ? courseInfo.data.title : "No result"}</div>
+      {/* <section className="bg-gray-900 text-white py-10 px-6 flex flex-col md:flex-row justify-center gap-10">
         <div className="max-w-2xl flex flex-col gap-4">
           <h1 className="text-4xl font-bold leading-tight">
             CompTIA A+ Core 2 (220-1002) Full Course & Practice Exam
@@ -32,7 +36,6 @@ export default function CourseDetailPage() {
           </p>
         </div>
 
-        {/* RIGHT - SIDEBAR */}
         <div className="w-full md:w-[320px]">
           <div className="bg-white shadow-lg rounded-xl overflow-hidden">
             <img
@@ -67,12 +70,8 @@ export default function CourseDetailPage() {
           </div>
         </div>
       </section>
-
-      {/* === MAIN CONTENT === */}
       <main className="max-w-5xl mx-auto p-6 flex flex-col lg:flex-row gap-10">
-        {/* LEFT */}
         <div className="flex-1 flex flex-col gap-6">
-          {/* Box 1: Course Info */}
           <div className="border border-gray-200 rounded-lg p-4 bg-white">
             <h2 className="font-bold text-xl mb-2">
               Luyện thi chứng chỉ của bạn với khóa học này
@@ -86,7 +85,6 @@ export default function CourseDetailPage() {
             </div>
           </div>
 
-          {/* Box 2: Description */}
           <div className="border border-gray-200 rounded-lg p-6 bg-white">
             <h2 className="font-bold text-2xl mb-3">Mô tả khóa học</h2>
             <p className="text-gray-700 mb-3">
@@ -104,7 +102,6 @@ export default function CourseDetailPage() {
             </p>
           </div>
 
-          {/* Box 3: What You'll Learn */}
           <div className="border border-gray-200 rounded-lg p-6 bg-white">
             <h2 className="font-bold text-2xl mb-3">Bạn sẽ học được gì</h2>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 list-disc list-inside text-gray-700">
@@ -117,7 +114,6 @@ export default function CourseDetailPage() {
             </ul>
           </div>
 
-          {/* Box 4: Related Courses */}
           <div className="p-4 border border-gray-200 rounded-lg bg-white">
             <h2 className="font-bold text-2xl mb-4">
               Khám phá các khóa học liên quan
@@ -141,7 +137,6 @@ export default function CourseDetailPage() {
           </div>
         </div>
 
-        {/* RIGHT - Instructor info */}
         <div className="w-full lg:w-[300px] h-fit border border-gray-200 rounded-lg bg-white p-4">
           <h3 className="font-bold text-xl mb-3">Giảng viên</h3>
           <div className="flex flex-col items-center gap-2">
@@ -154,7 +149,7 @@ export default function CourseDetailPage() {
             </p>
           </div>
         </div>
-      </main>
+      </main> */}
     </div>
   );
 }

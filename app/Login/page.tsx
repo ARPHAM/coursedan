@@ -6,6 +6,7 @@ import axios from "axios";
 import { Mail, Lock, Chrome, Facebook, Apple } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "@/components/ui/use-toast";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,6 +29,7 @@ export default function LoginPage() {
       if (!token) throw new Error("No token received");
 
       document.cookie = `access_token=${token}; path=/;`;
+      toast({ description: "Đăng nhập thành công!" });
       const role = res.data?.roles[0];
       if (role == "Admin") {
         router.push("/admin/courses");
@@ -37,7 +39,7 @@ export default function LoginPage() {
         router.push("/");
       }
     } catch (error: any) {
-      alert("Đăng nhập thất bại!");
+      toast({ description: "Đăng nhập thất bại!", variant: "destructive" });
     } finally {
       setLoading(false);
     }

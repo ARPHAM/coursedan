@@ -7,7 +7,7 @@ import Information from "./components/information";
 import Comment from "./components/comment";
 import Review from "./components/review";
 import { useParams } from "next/navigation";
-import { useCourse } from "./_api/mutation";
+import { useCourse } from "./_api/queries";
 
 export default function Page() {
   // const id = String(useParams().id);

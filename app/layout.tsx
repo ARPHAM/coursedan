@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "antd/dist/reset.css";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Toaster } from "@/components/ui/toaster";
 import Providers from "./providers";
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default async function RootLayout({
         <NuqsAdapter>
           <Providers>
             <main>{children}</main>
+            <Toaster />
           </Providers>
         </NuqsAdapter>
       </body>

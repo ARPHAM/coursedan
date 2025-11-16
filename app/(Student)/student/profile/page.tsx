@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useInfoStudent } from "./_api/mutation";
+import { useInfoStudent } from "./_api/queries";
 import InstructorProfilePage from "@/app/(Teacher)/teach/profile/page";
 
 type Tab = "info" | "registerToTeach" | "forgetPassword" | "logout";
@@ -20,10 +20,6 @@ export default function ProfilePage() {
     ["Đăng xuất", "logout"],
   ] as const;
   // const [language, setLanguage] = useState("vi");
-
-  useEffect(() => {
-    infoStudent.mutate();
-  }, []);
 
   if (infoStudent.isPending || !infoStudent.data) {
     return <>Loading...</>;

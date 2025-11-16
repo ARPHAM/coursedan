@@ -1,11 +1,14 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import { useCheckout } from "./_api/mutations";
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const params = useParams();
+  const courseId = String(params.courseId);
+  const submitCheckout = useCheckout();
 
-  // Dữ liệu khóa học giả lập (từ giỏ hàng)
   const course = {
     title: "Thành thạo Docker - Kubernetes trong 8 giờ - 2024",
     author: "Bởi Hieu Nguyen",
@@ -19,7 +22,6 @@ export default function CheckoutPage() {
   return (
     <div className="bg-gray-50 min-h-screen py-10">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 px-4">
-
         {/* --- FORM THANH TOÁN --- */}
         <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-2xl font-bold mb-4">Thanh toán</h2>
@@ -35,11 +37,18 @@ export default function CheckoutPage() {
           </div>
 
           {/* Phương thức thanh toán */}
-          <h3 className="font-semibold text-lg mt-6 mb-2">Phương thức thanh toán</h3>
+          <h3 className="font-semibold text-lg mt-6 mb-2">
+            Phương thức thanh toán
+          </h3>
 
           <div className="space-y-4">
             <div className="flex items-center">
-              <input type="radio" name="payment" defaultChecked className="mr-2" />
+              <input
+                type="radio"
+                name="payment"
+                defaultChecked
+                className="mr-2"
+              />
               <label className="font-medium">Thẻ (Visa / Master / JCB)</label>
             </div>
 
@@ -50,8 +59,16 @@ export default function CheckoutPage() {
                 placeholder="Số thẻ"
                 className="col-span-2 border p-2 rounded-md"
               />
-              <input type="text" placeholder="MM/YY" className="border p-2 rounded-md" />
-              <input type="text" placeholder="CVC/CVV" className="border p-2 rounded-md" />
+              <input
+                type="text"
+                placeholder="MM/YY"
+                className="border p-2 rounded-md"
+              />
+              <input
+                type="text"
+                placeholder="CVC/CVV"
+                className="border p-2 rounded-md"
+              />
               <input
                 type="text"
                 placeholder="Tên trên thẻ"
@@ -114,7 +131,7 @@ export default function CheckoutPage() {
           </div>
 
           <button
-            onClick={() => router.push("/success")}
+            onClick={() => submitCheckout.mutate(courseId)}
             className="w-full bg-purple-600 text-white py-3 mt-6 rounded-md font-bold hover:bg-purple-700 transition"
           >
             Thanh toán {course.newPrice}
