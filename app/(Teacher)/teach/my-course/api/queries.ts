@@ -21,7 +21,7 @@ export type PaginatedCourses = {
   totalItems: number;
   currentPage: number;
   totalPages: number;
-  courses: CourseItem[];
+  items: CourseItem[];
 };
 
 // 3. Định nghĩa kiểu cho các tham số (query params)
