@@ -3,7 +3,7 @@
 import Course from "@/components/course";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useCourses } from "../../_api/mutation";
+import { useCourses } from "../../_api/queries";
 import { useEffect } from "react";
 import FilterByPage from "@/components/FilterByPage";
 

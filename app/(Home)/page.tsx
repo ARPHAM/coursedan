@@ -5,7 +5,7 @@ import Course from "@/components/course";
 import NavbarMain from "@/components/navbarMain";
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
-import { useCourses } from "./_api/mutation";
+import { useCourses } from "./_api/queries";
 import FilterByPage from "@/components/FilterByPage";
 
 export default function Home() {

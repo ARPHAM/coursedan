@@ -17,14 +17,3 @@ export const useListCategory = () => {
     placeholderData: keepPreviousData,
   });
 };
-
-// export const useListCategory = (params: UseGroupsParams) => {
-// 	return useQuery<PaginateData<Group>>({
-// 		queryKey: ['useGroups', params],
-// 		queryFn: async ({ signal }) => {
-// 			let test = await axios.get('/admin/group/list', { params, signal }).then((res) => res.data.data)
-// 			return test
-// 		},
-// 		placeholderData: keepPreviousData,
-// 	})
-// }
