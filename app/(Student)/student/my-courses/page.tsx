@@ -23,7 +23,6 @@ export default function Page() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   const courses = useMyCourses({ limit, page });
-  console.log(limit);
   return (
     <div className="p-6">
       <h1 className="font-bold text-3xl mb-6 text-gray-800 pb-4">

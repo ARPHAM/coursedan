@@ -2,6 +2,8 @@
 
 import { useParams } from "next/navigation";
 import { useCourse } from "../_api/queries";
+import { useQueryState } from "nuqs";
+import { data } from "autoprefixer";
 
 export default function Video({
   urlVid,
@@ -10,9 +12,8 @@ export default function Video({
   urlVid: string;
   className: string;
 }) {
-  const params = useParams();
-  const id = String(params.id);
-  const course = useCourse(id);
+  const [lectureId, setLectureId] = useQueryState("Lecture");
+  const course = lectureId ? useCourse(lectureId) : { data: null };
   if (course.data)
     return (
       <div className={`aspect-video overflow-hidden shadow-lg ${className}`}>

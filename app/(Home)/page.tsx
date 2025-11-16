@@ -57,28 +57,6 @@ export default function Home() {
             </div>
           </div>
 
-          <Link href="/Login" className="text-blue-500 hover:underline">
-            Login
-          </Link>
-          <Link
-            href="/testcolor"
-            className="ml-4 text-blue-500 hover:underline"
-          >
-            TestColor
-          </Link>
-          <Link href="/profile" className="ml-4 text-blue-500 hover:underline">
-            profile
-          </Link>
-          <Link href="/teach" className="ml-4 text-blue-500 hover:underline">
-            Teach
-          </Link>
-          <Link
-            href="/admin/courses"
-            className="ml-4 text-blue-500 hover:underline"
-          >
-            Admin
-          </Link>
-
           {/* <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"> */}
           <div className="mt-8 flex gap-4 flex-wrap justify-center">
             {courses.isError && <>Error</>}
