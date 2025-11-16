@@ -10,7 +10,8 @@ type ListCategory = {
 export const useListCategory = () => {
   return useMutation<ListCategory>({
     mutationFn: async () => {
-      return await axios.get("/api/public/courses-category");
+      const res = await axios.get("/api/public/courses-category");
+      return res.data;
     },
     onSuccess: () => {},
     onError: () => {},

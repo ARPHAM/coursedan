@@ -24,12 +24,13 @@ export default function NavbarMain() {
       </div>
     );
   if (ListCategory.isError) return <>Error...</>;
-  return (
-    <div className="flex w-full shadow-md justify-center">
-      <div className="max-w-full h-12 overflow-x-auto scrollbar-hide">
-        <div className="py-4 flex w-full text-[16px]">
-          {ListCategory.isSuccess &&
-            ListCategory.data.map((category, index) => (
+  if (ListCategory.isSuccess) {
+    console.log(ListCategory.data);
+    return (
+      <div className="flex w-full shadow-md justify-center">
+        <div className="max-w-full h-12 overflow-x-auto scrollbar-hide">
+          <div className="py-4 flex w-full text-[16px]">
+            {ListCategory.data?.map((category, index) => (
               <Link
                 key={category.id}
                 href={`/courses/${category.name}`}
@@ -40,8 +41,9 @@ export default function NavbarMain() {
                 {category.name}
               </Link>
             ))}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }

@@ -30,9 +30,10 @@ type Params = {
 export const useCourses = () => {
   return useMutation<MyCourse, "", Params>({
     mutationFn: async (params) => {
-      return await axios.get("/api/public/courses", {
+      const res = await axios.get("/api/public/courses", {
         params: cleanObject(params),
       });
+      return res.data;
     },
     onSuccess: () => {},
     onError: () => {},
