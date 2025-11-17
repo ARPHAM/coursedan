@@ -92,7 +92,7 @@ export default function Header() {
               Giảng dạy
             </Link>
           )}
-          
+
           {payload && payload.role.includes("Student") && (
             <Link
               href="/Contact"
@@ -139,18 +139,22 @@ export default function Header() {
                     >
                       Cart
                     </Link>
-                    <Link
-                      href="/student/my-courses"
-                      className="block px-4 py-2 hover:bg-gray-100 transition"
-                    >
-                      My courses
-                    </Link>
-                    <Link
-                      href="/teach"
-                      className="block px-4 py-2 hover:bg-gray-100 transition"
-                    >
-                      Teach
-                    </Link>
+                    {payload && payload.role.includes("Student") && (
+                      <Link
+                        href="/student/my-courses"
+                        className="block px-4 py-2 hover:bg-gray-100 transition"
+                      >
+                        My courses
+                      </Link>
+                    )}
+                    {payload && payload.role.includes("Instructor") && (
+                      <Link
+                        href="/teach"
+                        className="block px-4 py-2 hover:bg-gray-100 transition"
+                      >
+                        Teach
+                      </Link>
+                    )}
                     <button
                       onClick={() => {
                         document.cookie =
