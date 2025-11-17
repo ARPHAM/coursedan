@@ -1,11 +1,12 @@
 "use client";
 import { Rate } from "antd";
-import { useState } from "react";
 import { useCourseInfo } from "./_api/queries";
 import { useParams } from "next/navigation";
 import SectionCourse from "./components/sectionCourse";
+import { useRouter } from "next/navigation";
 
 export default function CourseDetailPage() {
+  const route = useRouter();
   const params = useParams();
   const courseId = String(params.courseId);
   const courseInfo = useCourseInfo(courseId);
@@ -52,28 +53,33 @@ export default function CourseDetailPage() {
                 <div className="text-3xl font-bold text-black">
                   {courseInfo.data.price} VND
                 </div>
-                {/* {courseInfo.data.bought ? (
+                {courseInfo.data.bought ? (
                   <>
-                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition">
+                    <button
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition"
+                      onClick={() => {
+                        route;
+                      }}
+                    >
                       Học ngay
                     </button>
                   </>
-                ) : ( */}
-                <>
-                  <div className="text-red-500 font-medium">
-                    Còn 5 phút giảm giá!
-                  </div>
-                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition">
-                    Thêm vào giỏ hàng
-                  </button>
-                  <button className="w-full border bg-blue-600 text-blue-600 font-semibold py-2 rounded-md hover:bg-blue-50 transition">
-                    Mua ngay
-                  </button>
-                  <p className="text-sm text-gray-500 text-center">
-                    Đảm bảo hoàn tiền trong 30 ngày
-                  </p>
-                </>
-                {/* )} */}
+                ) : (
+                  <>
+                    <div className="text-red-500 font-medium">
+                      Còn 5 phút giảm giá!
+                    </div>
+                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition">
+                      Thêm vào giỏ hàng
+                    </button>
+                    <button className="w-full border bg-blue-600 text-blue-600 font-semibold py-2 rounded-md hover:bg-blue-50 transition">
+                      Mua ngay
+                    </button>
+                    <p className="text-sm text-gray-500 text-center">
+                      Đảm bảo hoàn tiền trong 30 ngày
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           </div>
