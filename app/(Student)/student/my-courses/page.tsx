@@ -8,6 +8,7 @@ import { useQueryState } from "nuqs";
 
 export default function Page() {
   const page = Number(useQueryState("page")[0]);
+  const search = useQueryState("search")[0];
   const [limit, setLimit] = useState(6);
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export default function Page() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const courses = useMyCourses({ limit, page });
+  const courses = useMyCourses({ limit, page, search });
   return (
     <div className="p-6">
       <h1 className="font-bold text-3xl mb-6 text-gray-800 pb-4">

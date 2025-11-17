@@ -27,14 +27,14 @@ type Course = {
   }[];
 };
 
-export const useCourse = (id: string) => {
+export const useCourse = (courseId: string) => {
   return useQuery<Course>({
-    queryKey: ["Course", id],
+    queryKey: ["Course", courseId],
     queryFn: async () => {
-      const res = await axios.get(`/api/Student/${id}/learn`);
+      const res = await axios.get(`/api/Student/${courseId}/learn`);
       return res.data;
     },
-    enabled: !!id,
+    enabled: !!courseId,
     placeholderData: keepPreviousData,
   });
 };

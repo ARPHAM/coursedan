@@ -1,5 +1,6 @@
 import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import axios from "@/config/axios";
+import { cleanObject } from "@/app/utils/cleanObject";
 type MyCourse = {
   items: {
     courseId: number;
@@ -31,8 +32,10 @@ type Params = {
 export const useMyCourses = (params: Params) => {
   return useQuery<MyCourse>({
     queryKey: ["ListMyCourses", params],
-    queryFn: async (params) => {
-      const res = await axios.get("/api/Student/my-courses", { params });
+    queryFn: async () => {
+      const res = await axios.get("/api/Student/my-courses", {
+        params: cleanObject(params),
+      });
       return res.data;
     },
     placeholderData: keepPreviousData,
