@@ -30,7 +30,7 @@ export const useCreateCourse = () => {
   return useMutation({
     // mutationFn: Gửi dữ liệu qua phương thức POST
     mutationFn: async (data: CreateCourseData) => {
-      const res = await axios.post("/api/instructor/course", data);
+      const res = await axios.post("/api/instructor/create-courses", data);
       return res.data;
     },
 
@@ -45,10 +45,31 @@ export const useCreateCourse = () => {
       router.push("/teach"); 
     },
 
-    onError: (e: any) => {
-      // Hiển thị thông báo lỗi cụ thể từ API hoặc thông báo mặc định
-      const message = e.response?.data?.message || "Tạo khóa học thất bại. Vui lòng kiểm tra lại dữ liệu.";
-      toast({ description: message, variant: "destructive" });
-    },
-  });
-};
+   onError: (e: any) => {
+    // ⚠️ BƯỚC QUAN TRỌNG: Ghi lại toàn bộ đối tượng lỗi E để xem nguyên nhân gốc
+    console.error("LỖI AXIOS CHI TIẾT:", e); 
+    
+    let errorMessage = "Tạo khóa học thất bại. Vui lòng kiểm tra lại dữ liệu.";
+
+    // Kiểm tra và xử lý lỗi cụ thể (chỉ khi e.response tồn tại)
+    if (e.response) {
+        // 1. Lấy thông báo lỗi từ body
+        if (e.response.data && e.response.data.message) {
+            errorMessage = e.response.data.message;
+        } 
+        // 2. Nếu không có message, kiểm tra Status Code để đưa ra gợi ý
+        else if (e.response.status === 400) {
+            errorMessage = "Lỗi 400: Dữ liệu không hợp lệ (Kiểm tra lại Title, Price, Section Title).";
+        }
+        else if (e.response.status === 401 || e.response.status === 403) {
+            errorMessage = "Lỗi 401/403: Vui lòng đăng nhập lại (Token hết hạn).";
+        }
+    } else {
+        // Nếu không có e.response (lỗi mạng/CORS), dùng thông báo của Axios
+        errorMessage = `Lỗi Mạng/CORS: ${e.message || "Không thể kết nối đến máy chủ."}`;
+    }
+
+    toast({ description: errorMessage, variant: "destructive" });
+},
+  }); // <-- Khối useMutation kết thúc
+}; 

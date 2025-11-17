@@ -1,9 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import axios from "@/config/axios"; // Giả sử đây là file config axios
+import axios from "@/config/axios";
 
-// 1. Định nghĩa kiểu dữ liệu (Type)
 export type CourseItem = {
   id: string | number;
   title: string;
@@ -16,7 +15,7 @@ export type CourseItem = {
   status: "Published" | "Pending" | "Draft" | "Rejected";
 };
 
-// 2. Định nghĩa kiểu cho API response (có phân trang)
+
 export type PaginatedCourses = {
   totalItems: number;
   currentPage: number;
@@ -24,7 +23,7 @@ export type PaginatedCourses = {
   items: CourseItem[];
 };
 
-// 3. Định nghĩa kiểu cho các tham số (query params)
+
 export type CourseQueryArgs = {
   status?: "Draft" | "Pending" | "Published";
   search?: string;
