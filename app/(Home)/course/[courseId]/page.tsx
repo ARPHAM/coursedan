@@ -58,7 +58,7 @@ export default function CourseDetailPage() {
                     <button
                       className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition"
                       onClick={() => {
-                        route;
+                        route.push(`/student/learn/${courseId}`);
                       }}
                     >
                       Học ngay
@@ -69,10 +69,18 @@ export default function CourseDetailPage() {
                     <div className="text-red-500 font-medium">
                       Còn 5 phút giảm giá!
                     </div>
-                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition">
+                    <button
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition"
+                      onClick={() => route.push("/student/cart")}
+                    >
                       Thêm vào giỏ hàng
                     </button>
-                    <button className="w-full border bg-blue-600 text-blue-600 font-semibold py-2 rounded-md hover:bg-blue-50 transition">
+                    <button
+                      className="w-full border bg-blue-600 text-blue-600 font-semibold py-2 rounded-md hover:bg-blue-700 transition"
+                      onClick={() =>
+                        route.push(`/student/checkout/${courseId}`)
+                      }
+                    >
                       Mua ngay
                     </button>
                     <p className="text-sm text-gray-500 text-center">

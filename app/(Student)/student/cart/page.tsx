@@ -148,7 +148,7 @@ export default function CartPage() {
                   {cartCourses.length} khóa học • Giảm giá siêu ưu đãi
                 </p>
 
-                <Link href="/checkout">
+                <Link href="/student/checkout/2">
                   <button className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition shadow-md">
                     Tiến hành thanh toán
                   </button>

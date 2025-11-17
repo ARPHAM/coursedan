@@ -5,13 +5,13 @@ import ProgressBar from "@/components/ProgressBar";
 import { useParams } from "next/navigation";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useQueryState } from "nuqs";
-import { useSection } from "@/app/(Student)/student/learn/[courseId]/_api/queries";
+import { useSection } from "../_api/queries";
 
 export default function SectionCourse({ className }: { className?: string }) {
   const params = useParams();
   const id = String(params.courseId);
   const [openSections, setOpenSections] = useState<number[]>([]);
-  const [lectureId, setLectureId] = useQueryState("Lecture");
+  const [vid, setVid] = useState("");
   const sections = useSection(id);
   const toggleSection = (id: number) => {
     setOpenSections((prev) =>
@@ -22,7 +22,6 @@ export default function SectionCourse({ className }: { className?: string }) {
   return (
     <div className={`p-4 overflow-y-auto ${className}`}>
       <h2 className="text-lg font-semibold mb-3">Danh sách bài giảng</h2>
-
       <ul className="space-y-2">
         {sections.data &&
           sections.data.map((section) => {
@@ -39,7 +38,7 @@ export default function SectionCourse({ className }: { className?: string }) {
                       {section.title}
                     </span>
                     <span className="text-xs text-gray-700 opacity-70">
-                      {section.totalLength} • {section.totalDuration}
+                      {section.totalLectures} • {section.totalDuration}
                     </span>
                   </div>
 
@@ -57,29 +56,58 @@ export default function SectionCourse({ className }: { className?: string }) {
                     isOpen ? "pt-2 max-h-[600px]" : "max-h-0"
                   }`}
                 >
-                  {section.lectures.map((lecture) => (
-                    <li key={lecture.id} className="flex flex-col">
-                      <div
-                        className={`p-3 border ${
-                          lecture.id.toString() === lectureId
-                            ? "bg-blue-100 hover:bg-blue-200"
-                            : "hover:bg-gray-50"
-                        } transition cursor-pointer flex justify-between`}
-                        onClick={() => setLectureId(lecture.id.toString())}
-                      >
-                        <span className="font-medium">{lecture.title}</span>
-                        <span className="text-sm text-gray-500">
-                          {lecture.duration}
-                        </span>
-                      </div>
-                      <ProgressBar value={lecture.process} />
-                    </li>
-                  ))}
+                  {section.lectures.map((lecture) => {
+                    const isPreview = lecture.isPreview;
+
+                    return (
+                      <li key={lecture.id} className="flex flex-col">
+                        <div
+                          className={`p-3 border transition flex justify-between
+          ${
+            isPreview
+              ? "cursor-pointer hover:bg-gray-50"
+              : "cursor-not-allowed opacity-40 select-none"
+          }
+        `}
+                          onClick={() => {
+                            if (isPreview) {
+                              setVid(lecture.descriptionUrl);
+                            }
+                          }}
+                        >
+                          <span className="font-medium">{lecture.title}</span>
+                          <span className="text-sm text-gray-500">
+                            {lecture.duration}
+                          </span>
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
               </li>
             );
           })}
       </ul>
+      {vid !== "" && (
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          onClick={() => setVid("")}
+        >
+          <div
+            className="bg-white rounded-lg p-2 shadow-xl max-w-[560px] w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <iframe
+              className="w-full aspect-video rounded-lg"
+              src={vid}
+              title="YouTube video player"
+              allow="accelerometer; autoplay; encrypted-media; picture-in-picture"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

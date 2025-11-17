@@ -14,7 +14,7 @@ export default function Video({ className }: { className: string }) {
       <div className={`aspect-video overflow-hidden shadow-lg ${className}`}>
         <iframe
           className="w-full h-full"
-          src="https://www.youtube.com/embed/1ppDCzoB03k?si=Df2qqaOHnjkYNHPo}"
+          src={lecture.data.urlVid}
           title="YouTube video player"
           allow="accelerometer; autoplay; encrypted-media; picture-in-picture"
           referrerPolicy="strict-origin-when-cross-origin"

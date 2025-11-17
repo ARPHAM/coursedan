@@ -23,3 +23,33 @@ export const useCourseInfo = (id: string) => {
     placeholderData: keepPreviousData,
   });
 };
+
+type Section = {
+  id: number;
+  courseId: number;
+  title: string;
+  totalLectures: number;
+  totalDuration: string;
+  lectures: {
+    id: number;
+    sectionId: number;
+    courseId: number;
+    title: string;
+    descriptionUrl: string;
+    orderIndex: number;
+    length: number;
+    duration: number;
+    isPreview: boolean;
+  }[];
+}[];
+
+export const useSection = (id: string) => {
+  return useQuery<Section>({
+    queryKey: ["Section", id],
+    queryFn: async () => {
+      const res = await axios.get(`/api/public/courses/${id}/sections`);
+      return res.data;
+    },
+    placeholderData: keepPreviousData,
+  });
+};
