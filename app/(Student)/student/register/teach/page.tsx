@@ -1,140 +1,353 @@
 "use client";
-import { useState } from "react";
+
+import { useForm } from "react-hook-form";
+import { ArrowLeft, CheckCircle2, XCircle, Clock } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useGetInstructorRequest } from "./api/queries";
+import { useApplyInstructor, ApplyInstructorDto } from "./api/mutation";
+
+type FormValues = ApplyInstructorDto;
 
 export default function ApplyInstructorPage() {
-  const [form, setForm] = useState({
-    fullName: "",
-    email: "",
-    title: "",
-    experience: "",
-    bio: "",
-    portfolioUrl: "",
-  });
+  const router = useRouter();
+  const { data: request, isLoading } = useGetInstructorRequest();
+  const applyMutation = useApplyInstructor();
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+  const onSubmit = (data: FormValues) => {
+    applyMutation.mutate(data, {
+      onSuccess: () => {
+        // Refresh để hiển thị status
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      },
+    });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      const res = await fetch("/api/instructor/apply", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      if (!res.ok) throw new Error("Lỗi khi gửi yêu cầu");
-      alert("✅ Gửi yêu cầu thành công! Vui lòng chờ xét duyệt.");
-    } catch (err) {
-      alert("❌ " + err.message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  // Loading
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  // ===== ĐÃ GỬI ĐƠN - HIỂN THỊ TRẠNG THÁI =====
+
+  if (request) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12 px-6">
+        <div className="max-w-2xl mx-auto">
+          {/* Breadcrumb */}
+          <div className="mb-6">
+            <Link href="/dashboard" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm">
+              <ArrowLeft className="w-4 h-4" />
+              Quay lại Dashboard
+            </Link>
+          </div>
+
+          {/* Status Card */}
+          <div className="bg-white rounded-xl shadow-sm border p-8">
+            {/* PENDING */}
+            {request.status === "Pending" && (
+              <div className="text-center">
+                <div className="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Clock className="w-10 h-10 text-yellow-600" />
+                </div>
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                  Đơn đang chờ duyệt
+                </h1>
+                <p className="text-gray-600 mb-6">
+                  Đơn đăng ký làm giảng viên của bạn đang được admin xem xét.
+                  <br />
+                  Thời gian xử lý thường là 24-48 giờ.
+                </p>
+                
+                {/* Thông tin đã gửi */}
+                <div className="bg-gray-50 rounded-lg p-6 text-left mt-6">
+                  <h3 className="font-semibold text-gray-900 mb-4">Thông tin đã gửi:</h3>
+                  <div className="space-y-3 text-sm">
+                    <div>
+                      <span className="text-gray-600">Chức danh:</span>
+                      <p className="text-gray-900 font-medium">{request.title}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Giới thiệu:</span>
+                      <p className="text-gray-900">{request.bio}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Kinh nghiệm:</span>
+                      <p className="text-gray-900">{request.experience}</p>
+                    </div>
+                    {request.portfolioUrl && (
+                      <div>
+                        <span className="text-gray-600">Portfolio:</span>
+                        <a href={request.portfolioUrl} target="_blank" className="text-blue-600 hover:underline block">
+                          {request.portfolioUrl}
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => router.push("/dashboard")}
+                  className="mt-6 px-6 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 font-medium"
+                >
+                  Quay lại Dashboard
+                </button>
+              </div>
+            )}
+
+            {/* APPROVED */}
+            {request.status === "Approved" && (
+              <div className="text-center">
+                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle2 className="w-10 h-10 text-green-600" />
+                </div>
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                  Chúc mừng! Đơn đã được duyệt
+                </h1>
+                <p className="text-gray-600 mb-6">
+                  Bạn đã chính thức trở thành giảng viên.
+                  <br />
+                  Giờ đây bạn có thể tạo và quản lý khóa học của mình!
+                </p>
+
+                <div className="flex gap-3 justify-center">
+                  <button
+                    onClick={() => router.push("/dashboard")}
+                    className="px-6 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium"
+                  >
+                    Về Dashboard
+                  </button>
+                  <button
+                    onClick={() => router.push("/teach/create")}
+                    className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+                  >
+                    Tạo khóa học đầu tiên
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* REJECTED */}
+            {request.status === "Rejected" && (
+              <div className="text-center">
+                <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <XCircle className="w-10 h-10 text-red-600" />
+                </div>
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                  Đơn bị từ chối
+                </h1>
+                <p className="text-gray-600 mb-4">
+                  Rất tiếc, đơn đăng ký của bạn chưa được phê duyệt.
+                </p>
+
+                {/* Lý do từ chối */}
+                {request.rejectReason && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-left">
+                    <p className="text-sm font-semibold text-red-800 mb-1">Lý do từ chối:</p>
+                    <p className="text-red-700">{request.rejectReason}</p>
+                  </div>
+                )}
+
+                <p className="text-gray-600 mb-6">
+                  Bạn có thể liên hệ admin để biết thêm chi tiết hoặc cải thiện hồ sơ và đăng ký lại sau.
+                </p>
+
+                <div className="flex gap-3 justify-center">
+                  <button
+                    onClick={() => router.push("/dashboard")}
+                    className="px-6 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium"
+                  >
+                    Về Dashboard
+                  </button>
+                  <button
+                    onClick={() => router.push("/contact")}
+                    className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+                  >
+                    Liên hệ Admin
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ===== CHƯA GỬI ĐƠN - HIỂN THỊ FORM ĐĂNG KÝ =====
 
   return (
-    <div className="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow mt-10">
-      <h1 className="text-2xl font-bold mb-4 text-gray-800">
-        Đăng ký trở thành giảng viên
-      </h1>
-      <p className="text-gray-600 mb-6">
-        Vui lòng cung cấp thông tin cá nhân và kinh nghiệm giảng dạy của bạn.
-      </p>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium">Họ và tên</label>
-          <input
-            type="text"
-            name="fullName"
-            value={form.fullName}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded-lg"
-          />
+    <div className="min-h-screen bg-gray-50 py-12 px-6">
+      <div className="max-w-2xl mx-auto">
+        {/* Breadcrumb */}
+        <div className="mb-6">
+          <Link href="/dashboard" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm">
+            <ArrowLeft className="w-4 h-4" />
+            Quay lại Dashboard
+          </Link>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded-lg"
-          />
-        </div>
+        {/* Form Card */}
+        <div className="bg-white rounded-xl shadow-sm border p-8">
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              Đăng ký trở thành giảng viên
+            </h1>
+            <p className="text-gray-600">
+              Vui lòng cung cấp thông tin về kinh nghiệm và chuyên môn của bạn.
+              Admin sẽ xem xét và phản hồi trong vòng 24-48 giờ.
+            </p>
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium">
-            Chức danh / Nghề nghiệp
-          </label>
-          <input
-            type="text"
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            placeholder="VD: Lập trình viên backend tại FPT"
-            required
-            className="w-full p-2 border rounded-lg"
-          />
-        </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Title */}
+            <div>
+              <label htmlFor="title" className="block text-sm font-semibold text-gray-700 mb-2">
+                Chức danh / Nghề nghiệp <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="title"
+                {...register("title", {
+                  required: "Vui lòng nhập chức danh",
+                  minLength: { value: 5, message: "Tối thiểu 5 ký tự" },
+                })}
+                type="text"
+                placeholder="VD: Lập trình viên Backend, Chuyên gia AI..."
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              {errors.title && (
+                <p className="text-red-500 text-sm mt-1.5">{errors.title.message}</p>
+              )}
+            </div>
 
-        <div>
-          <label className="block text-sm font-medium">
-            Kinh nghiệm giảng dạy
-          </label>
-          <textarea
-            name="experience"
-            value={form.experience}
-            onChange={handleChange}
-            rows={3}
-            placeholder="VD: 5 năm giảng dạy React, Node.js tại trung tâm XYZ"
-            className="w-full p-2 border rounded-lg"
-          ></textarea>
-        </div>
+            {/* Bio */}
+            <div>
+              <label htmlFor="bio" className="block text-sm font-semibold text-gray-700 mb-2">
+                Giới thiệu bản thân <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                id="bio"
+                {...register("bio", {
+                  required: "Vui lòng giới thiệu về bản thân",
+                  minLength: { value: 50, message: "Tối thiểu 50 ký tự" },
+                })}
+                rows={4}
+                placeholder="Giới thiệu ngắn về bản thân, kỹ năng, sở thích giảng dạy..."
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              />
+              {errors.bio && (
+                <p className="text-red-500 text-sm mt-1.5">{errors.bio.message}</p>
+              )}
+            </div>
 
-        <div>
-          <label className="block text-sm font-medium">
-            Giới thiệu bản thân
-          </label>
-          <textarea
-            name="bio"
-            value={form.bio}
-            onChange={handleChange}
-            rows={4}
-            placeholder="Mô tả ngắn về kỹ năng, dự án, hoặc đam mê giảng dạy của bạn"
-            className="w-full p-2 border rounded-lg"
-          ></textarea>
-        </div>
+            {/* Experience */}
+            <div>
+              <label htmlFor="experience" className="block text-sm font-semibold text-gray-700 mb-2">
+                Kinh nghiệm giảng dạy / Chuyên môn <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                id="experience"
+                {...register("experience", {
+                  required: "Vui lòng mô tả kinh nghiệm",
+                  minLength: { value: 30, message: "Tối thiểu 30 ký tự" },
+                })}
+                rows={4}
+                placeholder="VD: 3 năm giảng dạy lập trình web tại trung tâm ABC, chuyên về React và Node.js..."
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              />
+              {errors.experience && (
+                <p className="text-red-500 text-sm mt-1.5">{errors.experience.message}</p>
+              )}
+            </div>
 
-        <div>
-          <label className="block text-sm font-medium">
-            Portfolio / LinkedIn / Website
-          </label>
-          <input
-            type="url"
-            name="portfolioUrl"
-            value={form.portfolioUrl}
-            onChange={handleChange}
-            placeholder="https://yourportfolio.com"
-            className="w-full p-2 border rounded-lg"
-          />
-        </div>
+            {/* Portfolio */}
+            <div>
+              <label htmlFor="portfolioUrl" className="block text-sm font-semibold text-gray-700 mb-2">
+                Portfolio / LinkedIn / Website
+              </label>
+              <input
+                id="portfolioUrl"
+                {...register("portfolioUrl", {
+                  pattern: {
+                    value: /^https?:\/\/.+/,
+                    message: "URL phải bắt đầu bằng http:// hoặc https://",
+                  },
+                })}
+                type="url"
+                placeholder="https://yourportfolio.com hoặc https://linkedin.com/in/yourname"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              {errors.portfolioUrl && (
+                <p className="text-red-500 text-sm mt-1.5">{errors.portfolioUrl.message}</p>
+              )}
+            </div>
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-        >
-          {isSubmitting ? "Đang gửi..." : "Gửi yêu cầu"}
-        </button>
-      </form>
+            {/* Certificate */}
+            <div>
+              <label htmlFor="certificateUrl" className="block text-sm font-semibold text-gray-700 mb-2">
+                Chứng chỉ / Bằng cấp (URL)
+              </label>
+              <input
+                id="certificateUrl"
+                {...register("certificateUrl", {
+                  pattern: {
+                    value: /^https?:\/\/.+/,
+                    message: "URL phải bắt đầu bằng http:// hoặc https://",
+                  },
+                })}
+                type="url"
+                placeholder="https://drive.google.com/your-certificate"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              {errors.certificateUrl && (
+                <p className="text-red-500 text-sm mt-1.5">{errors.certificateUrl.message}</p>
+              )}
+            </div>
+
+            {/* Info Box */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-sm text-blue-800">
+                💡 <strong>Lưu ý:</strong> Sau khi gửi đơn, bạn sẽ nhận được email thông báo khi admin phê duyệt. Vui lòng kiểm tra email thường xuyên.
+              </p>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex justify-end gap-3 pt-4">
+              <button
+                type="button"
+                onClick={() => router.push("/dashboard")}
+                disabled={applyMutation.isPending}
+                className="px-6 py-2.5 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 disabled:opacity-50"
+              >
+                Hủy
+              </button>
+              <button
+                type="submit"
+                disabled={applyMutation.isPending}
+                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
+              >
+                {applyMutation.isPending ? (
+                  <>
+                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Đang gửi...
+                  </>
+                ) : "Gửi đơn đăng ký"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
