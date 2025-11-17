@@ -24,7 +24,7 @@ export default function Review() {
           {course.data.reviews.map((review) => (
             <div key={review.atTime}>
               <div className="flex gap-4">
-                <div className="flex rounded-full w-10 h-10 bg-amber-400">
+                <div className="flex rounded-full w-10 h-10 bg-amber-300">
                   <div className="m-auto">{review.author[0]}</div>
                 </div>
                 <div className="flex flex-col gap-1 w-full">

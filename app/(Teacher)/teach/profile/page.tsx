@@ -227,16 +227,7 @@ export default function ProfilePage() {
               ✓ Đã phê duyệt - Bạn có thể tạo khóa học
             </span>
           )}
-          {profile.status === "Pending" && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-              <span className="inline-flex items-center text-sm font-medium text-yellow-800">
-                ⏳ Đang chờ admin phê duyệt
-              </span>
-              <p className="text-yellow-700 text-sm mt-1">
-                Hồ sơ của bạn đang được xem xét. Bạn sẽ nhận được thông báo qua email khi có kết quả.
-              </p>
-            </div>
-          )}
+        
           {profile.status === "Rejected" && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-3">
               <span className="inline-flex items-center text-sm font-medium text-red-800">
