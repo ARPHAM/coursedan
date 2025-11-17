@@ -1,175 +1,131 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Edit, Trash } from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
+import { useDebouncedValue } from "@mantine/hooks"; 
 
-export default function TeachDashboardPage() {
-  const [courses, setCourses] = useState<any[]>([]);
-  const router = useRouter();
+import { useGetInstructorCourses, CourseItem } from "./my-course/api/queries";
+import { useDeleteCourse } from "./my-course/api/mutation";
 
-  useEffect(() => {
-    setCourses([
-      {
-        id: 1,
-        title: "DevOps và Docker",
-        description:
-          "Tìm hiểu về DevOps practices và containerization với Docker. Deploy ứng dụng một cách hiệu quả.",
-        price: "1.800.000",
-        lectures: 7,
-        duration: "10 giờ",
-        imageUrl: "/images/course.jpg",
-        status: "Chờ duyệt",
-        category: "DevOps",
-      },
-      {
-        id: 2,
-        title: "Lập trình Web với React",
-        description:
-          "Khóa học toàn diện về React từ cơ bản đến nâng cao. Xây dựng ứng dụng web hiện đại với Next.js.",
-        price: "1.500.000",
-        lectures: 8,
-        duration: "12 giờ",
-        imageUrl: "/images/banner.png",
-        status: "Đã xuất bản",
-        category: "Lập trình",
-      },
-      {
-        id: 3,
-        title: "Lập trình Web với Angular",
-        description:
-          "Khóa học chuyên sâu về Angular. Tạo ứng dụng hiệu suất cao với kiến trúc mạnh mẽ.",
-        price: "1.900.000",
-        lectures: 10,
-        duration: "20 giờ",
-        imageUrl: "/images/banner.png",
-        status: "Đã xuất bản",
-        category: "Lập trình",
-      },
-      {
-        id: 4,
-        title: "Node.js Cơ bản",
-        description:
-          "Làm quen với Node.js và Express để xây dựng ứng dụng backend chuyên nghiệp.",
-        price: "1.200.000",
-        lectures: 6,
-        duration: "8 giờ",
-        imageUrl: "/images/banner.png",
-        status: "Đã xuất bản",
-        category: "Backend",
-      },
-      {
-        id: 5,
-        title: "Python cho người mới bắt đầu",
-        description:
-          "Khóa học nhập môn Python với nhiều ví dụ thực tế, phù hợp cho người mới bắt đầu lập trình.",
-        price: "900.000",
-        lectures: 5,
-        duration: "6 giờ",
-        imageUrl: "/images/banner.png",
-        status: "Chờ duyệt",
-        category: "Lập trình",
-      },
-      {
-        id: 6,
-        title: "Kubernetes nâng cao",
-        description:
-          "Tìm hiểu cách triển khai và quản lý ứng dụng với Kubernetes trong môi trường thực tế.",
-        price: "2.000.000",
-        lectures: 9,
-        duration: "15 giờ",
-        imageUrl: "/images/course.jpg",
-        status: "Đã xuất bản",
-        category: "DevOps",
-      },
-    ]);
-  }, []);
+export default function MyCoursesPage() {
+  // ✨ 1. State cho tìm kiếm
+  const [searchTerm, setSearchTerm] = useState("");
+  // Dùng debounce để không gọi API liên tục khi gõ
+  const [debouncedSearch] = useDebouncedValue(searchTerm, 500); 
 
-  const handleEdit = (id: number) => {
-    router.push(`/teach/courses/${id}/edit`);
-  };
+  // ✨ 2. Lấy dữ liệu (GET)
+  const {
+    data: paginatedData,
+    isLoading, // Thay thế cho 'loading'
+    isError,   // Thêm xử lý lỗi
+  } = useGetInstructorCourses({
+    search: debouncedSearch || undefined, // Gửi search nếu có
+    limit: 20, // Lấy 20 khóa học
+  });
 
+  // ✨ Lấy mảng 'courses' từ data trả về
+  const courses = paginatedData?.items;
+
+  // ✨ 3. Lấy mutation (DELETE)
+  const deleteMutation = useDeleteCourse();
+
+  // ✨ 4. Hàm xử lý Xóa (đã được đơn giản hóa)
   const handleDelete = (id: number) => {
-    if (confirm("Bạn có chắc muốn xóa khóa học này không?")) {
-      setCourses((prev) => prev.filter((c) => c.id !== id));
-    }
+    if (!confirm("Bạn có chắc muốn xóa khóa học này?")) return;
+    
+    // Chỉ cần gọi mutate. React Query sẽ tự động cập nhật UI
+    deleteMutation.mutate({ courseId: id });
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Đã xuất bản":
-        return "bg-green-100 text-green-800";
-      case "Chờ duyệt":
-        return "bg-yellow-100 text-yellow-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
+  // ✨ 5. Xử lý Loading / Error
+  if (isLoading)
+    return (
+      <div className="flex justify-center py-10 text-gray-500">
+        Đang tải dữ liệu...
+      </div>
+    );
 
+  if (isError || !courses) {
+    return <div className="p-6 text-red-500">Lỗi: Không tải được dữ liệu.</div>;
+  }
+
+  // === Render (Giữ nguyên 100% JSX của bạn) ===
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <h1 className="text-2xl font-semibold mb-6">Khóa học của tôi</h1>
+    <div className="max-w-8xl mx-auto px-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-semibold">Khóa học của tôi</h1>
+
+      </div>
+      
+      <input
+        type="text"
+        placeholder="Tìm kiếm khóa học..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="w-full max-w-md border rounded-lg px-4 py-2 mb-6"
+      />
 
       {courses.length === 0 ? (
-        <p className="text-gray-600">Bạn chưa có khóa học nào.</p>
+        <p className="text-gray-500">Bạn chưa có khóa học nào.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
-          {courses.map((course) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Sửa: map qua 'courses' */}
+          {courses.map((course: CourseItem) => (
             <div
               key={course.id}
-              className="bg-white border rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col"
+              className="bg-white border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition"
             >
               <img
                 src={course.imageUrl}
                 alt={course.title}
-                className="w-full h-40 object-cover rounded-t-xl"
+                className="w-full h-40 object-cover"
               />
 
-              <div className="p-3 flex flex-col flex-1">
-                <div className="flex flex-wrap gap-2 mb-2">
+              <div className="p-4 flex flex-col gap-2">
+                <div className="flex flex-wrap gap-2 text-xs">
                   <span
-                    className={`${getStatusColor(
-                      course.status
-                    )} text-xs px-2 py-1 rounded-full font-medium`}
+                    className={`px-2 py-0.5 rounded-full font-medium ${
+                      course.status === "Published" // Sửa: Dùng "Published" (viết hoa)
+                        ? "bg-green-100 text-green-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    }`}
                   >
-                    {course.status}
+                    {course.status === "Published"
+                      ? "Đã xuất bản"
+                      : "Chờ duyệt"}
                   </span>
-                  <span className="bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded-full font-medium">
+                  <span className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full font-medium">
                     {course.category}
                   </span>
                 </div>
 
-                <h3 className="text-sm font-semibold line-clamp-1 mb-1">
-                  {course.title}
-                </h3>
-                <p className="text-xs text-gray-600 line-clamp-2 mb-2">
+                <h2 className="text-lg font-semibold">{course.title}</h2>
+                <p className="text-sm text-gray-600 line-clamp-2">
                   {course.description}
                 </p>
 
-                <p className="text-xs text-gray-700">
-                  <strong>Giá:</strong>{" "}
-                  <span className="text-gray-900 font-semibold">
-                    {course.price} đ
-                  </span>
-                </p>
-
-                <div className="flex justify-between text-xs text-gray-600 mt-1 mb-3">
-                  <span>Bài giảng: {course.lectures}</span>
-                  <span>⏱ {course.duration}</span>
+                <div className="text-sm text-gray-500 mt-2">
+                  <p>Giá: {course.price.toLocaleString()} đ</p>
+                  <p>Bài giảng: {course.lecturesCount || 0}</p>
+                  <p>Thời lượng: {course.totalDuration || 0} giờ</p>
                 </div>
 
-                <div className="flex justify-between border-t pt-2 gap-2 mt-auto">
-                  <button
-                    onClick={() => handleEdit(course.id)}
-                    className="flex-1 flex items-center justify-center gap-1 py-1.5 text-xs border rounded-md hover:bg-gray-100 transition"
+                <div className="flex justify-between mt-3">
+                  <Link
+                    href={`/teach/courses/${course.id}/edit`}
+                    className="text-blue-600 text-sm font-medium hover:underline"
                   >
-                    <Edit size={14} /> Sửa
-                  </button>
+                    Sửa
+                  </Link>
                   <button
-                    onClick={() => handleDelete(course.id)}
-                    className="flex-1 flex items-center justify-center gap-1 py-1.5 text-xs border rounded-md text-red-600 hover:bg-red-50 transition"
+                    onClick={() => handleDelete(course.id as number)}
+                    disabled={deleteMutation.isPending && deleteMutation.variables?.courseId === course.id}
+                    className="text-red-600 text-sm font-medium hover:underline disabled:opacity-50"
                   >
-                    <Trash size={14} /> Xóa
+                    {/* ✨ Thêm trạng thái 'disabled' khi đang xóa */}
+                    {deleteMutation.isPending && deleteMutation.variables?.courseId === course.id
+                      ? "Đang xóa..."
+                      : "Xóa"}
                   </button>
                 </div>
               </div>

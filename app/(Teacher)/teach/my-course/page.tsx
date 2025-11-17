@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-// Cần cài: npm install @mantine/hooks
 import { useDebouncedValue } from "@mantine/hooks"; 
 
-// ✨ Import các hook React Query
 import { useGetInstructorCourses, CourseItem } from "./api/queries";
 import { useDeleteCourse } from "./api/mutation";
 
@@ -26,7 +24,7 @@ export default function MyCoursesPage() {
   });
 
   // ✨ Lấy mảng 'courses' từ data trả về
-  const courses = paginatedData?.courses;
+  const courses = paginatedData?.items;
 
   // ✨ 3. Lấy mutation (DELETE)
   const deleteMutation = useDeleteCourse();
