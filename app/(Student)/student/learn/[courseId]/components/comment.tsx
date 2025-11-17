@@ -10,7 +10,6 @@ export default function Comment() {
   const lecture = useLecture({ courseId, lectureId });
 
   if (!lecture.data) return null;
-
   return (
     <>
       <div className="mt-2">
