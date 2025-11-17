@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Search, ShoppingCart, Heart, Bell } from "lucide-react";
+import { useQueryState } from "nuqs";
 export default function Header() {
   const [token, setToken] = useState<string | undefined>(undefined);
   const [payload, setPayload] = useState<
@@ -10,6 +11,9 @@ export default function Header() {
   >(undefined);
   const [openNotification, setOpenNotification] = useState(false);
   const [openSetting, setOpenSetting] = useState(false);
+  const [search, setSearch] = useQueryState("search", {
+    defaultValue: "",
+  });
 
   useEffect(() => {
     const match = document.cookie
@@ -73,6 +77,8 @@ export default function Header() {
           <input
             type="text"
             placeholder="Tìm kiếm nội dung bất kỳ"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-full bg-gray-50 focus:border-blue-500 focus:ring-blue-500 outline-none"
           />
         </div>
@@ -101,33 +107,6 @@ export default function Header() {
                 <ShoppingCart className="w-6 h-6" />
               </Link>
               <div
-                className="relative hover:text-blue-600 p-1 hidden sm:block"
-                onMouseEnter={() => setOpenNotification(true)}
-                onMouseLeave={() => setOpenNotification(false)}
-              >
-                <Bell className="w-6 h-6" />
-                {openNotification && (
-                  <div className="absolute right-0 w-40 bg-white border rounded-lg shadow-lg text-sm z-50">
-                    <Link
-                      href="/student/profile"
-                      className="block px-4 py-2 hover:bg-gray-100 transition"
-                    >
-                      Profile
-                    </Link>
-                    <button
-                      onClick={() => {
-                        document.cookie =
-                          "access_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax;";
-                        window.location.reload();
-                      }}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-100 transition"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-              <div
                 className="relative inline-block"
                 onMouseEnter={() => setOpenSetting(true)}
                 onMouseLeave={() => setOpenSetting(false)}
@@ -144,6 +123,24 @@ export default function Header() {
                       className="block px-4 py-2 hover:bg-gray-100 transition"
                     >
                       Profile
+                    </Link>
+                    <Link
+                      href="/student/cart"
+                      className="block px-4 py-2 hover:bg-gray-100 transition"
+                    >
+                      Cart
+                    </Link>
+                    <Link
+                      href="/student/my-courses"
+                      className="block px-4 py-2 hover:bg-gray-100 transition"
+                    >
+                      My courses
+                    </Link>
+                    <Link
+                      href="/teach"
+                      className="block px-4 py-2 hover:bg-gray-100 transition"
+                    >
+                      Teach
                     </Link>
                     <button
                       onClick={() => {

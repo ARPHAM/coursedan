@@ -10,7 +10,7 @@ import FilterByPage from "@/components/FilterByPage";
 
 export default function Home() {
   const page = Number(useQueryState("page")[0]);
-  const search = useQueryState("search")[""];
+  const search = useQueryState("search")[0];
   const [limit, setLimit] = useState(6);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const courses = useListCourses({});
+  const courses = useListCourses({ page, search, limit });
 
   if (courses.isSuccess) {
     return (

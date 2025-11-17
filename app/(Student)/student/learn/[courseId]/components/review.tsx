@@ -2,10 +2,11 @@
 import { useQueryState } from "nuqs";
 import { useCourse } from "../_api/queries";
 import Rate from "@/components/ui/rate";
+import { useParams } from "next/navigation";
 
 export default function Review() {
-  const [lectureId] = useQueryState("Lecture");
-  const course = useCourse(lectureId);
+  const courseId = useParams().couresId[0];
+  const course = useCourse(courseId);
 
   if (!course.data) return null;
   return (

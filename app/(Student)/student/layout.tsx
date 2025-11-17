@@ -1,5 +1,6 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
+import { Suspense } from "react";
 
 export default function RootLayout({
   children,
@@ -9,8 +10,10 @@ export default function RootLayout({
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <div>
-        <Header />
-        {children}
+        <Suspense>
+          <Header />
+          {children}
+        </Suspense>
       </div>
       <Footer />
     </div>

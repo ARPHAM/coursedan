@@ -10,8 +10,10 @@ export default function RootLayout({
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <div>
-        <Header />
-        <Suspense>{children}</Suspense>
+        <Suspense>
+          <Header />
+          {children}
+        </Suspense>
       </div>
       <Footer />
     </div>

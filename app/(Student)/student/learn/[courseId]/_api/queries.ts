@@ -1,10 +1,8 @@
 import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import axios from "@/config/axios";
 type Course = {
-  id: number;
-  title: string;
-  urlVid: string;
-  progress: number;
+  courseId: number;
+  courseTitle: string;
   rating: {
     "0": number;
     "1": number;
@@ -13,28 +11,75 @@ type Course = {
     "4": number;
     "5": number;
   };
-  comments: {
-    author: string;
-    atTime: string;
-    avatar: string;
-    content: string;
-    reply: {
+  instructor: {
+    name: string;
+    title: string;
+    bio: string;
+    experience: string;
+    certificate: string[];
+  };
+  reviews: [
+    {
       author: string;
       atTime: string;
       avatar: string;
       content: string;
-    }[];
-  }[];
+      reply: string[];
+    }
+  ];
 };
 
-export const useCourse = (id: string) => {
+export const useCourse = (courseId: string) => {
   return useQuery<Course>({
-    queryKey: ["Course", id],
+    queryKey: ["Course", courseId],
     queryFn: async () => {
-      const res = await axios.get(`/api/Student/${id}/learn`);
+      const res = await axios.get(`/api/Student/course/${courseId}/learn`);
       return res.data;
     },
-    enabled: !!id,
+    enabled: !!courseId,
+    placeholderData: keepPreviousData,
+  });
+};
+
+type Lecture = {
+  id: number;
+  title: string;
+  urlVid: string;
+  progress: number;
+  comment: [
+    {
+      author: string;
+      atTime: string;
+      avatar: string;
+      content: string;
+      reply: [
+        {
+          author: string;
+          atTime: string;
+          avatar: string;
+          content: string;
+        }
+      ];
+    }
+  ];
+};
+
+export const useLecture = ({
+  courseId,
+  lectureId,
+}: {
+  courseId: string;
+  lectureId: string;
+}) => {
+  return useQuery<Lecture>({
+    queryKey: ["Course", courseId, lectureId],
+    queryFn: async () => {
+      const res = await axios.get(
+        `/api/Student/${courseId}/learn/${lectureId}`
+      );
+      return res.data;
+    },
+    enabled: !!courseId && !!lectureId,
     placeholderData: keepPreviousData,
   });
 };

@@ -4,6 +4,8 @@ import TabInfo from "./info";
 import ChangePasswordPage from "./changePassword";
 import { useRouter } from "next/navigation";
 import InstructorRegister from "./instructorRegister";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 type Tab = "info" | "registerToTeach" | "forgetPassword" | "logout";
 
 export default function Tab() {
@@ -24,6 +26,15 @@ export default function Tab() {
   return (
     <>
       <aside className="w-64 border-r border-gray-200 p-6 bg-white">
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Quay lại Dashboard
+          </Link>
+        </div>
         <nav className="space-y-1 text-sm">
           {tabs.map(([label, value], index) => (
             <button

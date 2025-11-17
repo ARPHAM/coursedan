@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useCourseInfo } from "@/app/(Home)/course/[id]/_api/queries";
+import { useCourseInfo } from "@/app/(Home)/course/[courseId]/_api/queries";
 
 export default function Information() {
   const params = useParams();
