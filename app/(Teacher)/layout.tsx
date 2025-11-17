@@ -1,8 +1,10 @@
+import { Suspense } from "react";
+
 // app/(Teacher)/layout.tsx
 export default function TeacherGroupLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return <Suspense>{children}</Suspense>;
 }
