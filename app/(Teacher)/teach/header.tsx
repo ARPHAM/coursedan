@@ -67,7 +67,7 @@ export default function GlobalHeader() {
             }
             router.replace(`${pathname}?${params.toString()}`);
         }
-    }, [debouncedTerm, pathname, router,]);
+    }, [debouncedTerm, pathname, router, searchParams]);
 
     return (
         <header className="w-full bg-white border-b border-gray-200">
@@ -91,7 +91,7 @@ export default function GlobalHeader() {
                 </div>
 
                 {/* Navigation & Icons */}
-                <nav className="flex items-center gap-5 text-sm font-medium text-gray-700 flex-shrink-0">
+                <nav className="flex items-center gap-5 text-sm font-medium text-gray-700 shrink-0">
                     {/* Các liên kết */}
                     <Link href="/teach/dashboard" className="hover:text-black whitespace-nowrap px-2">Dashboard</Link>
                     <Link href="/teach" className="hover:text-black whitespace-nowrap px-2">Khóa học của tôi</Link>
@@ -142,7 +142,7 @@ export default function GlobalHeader() {
                     <div className="relative ml-1" ref={userRef}>
                         <button
                             onClick={() => setShowUserMenu(!showUserMenu)}
-                            className="bg-gray-800 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition hover:ring-2 hover:ring-blue-500 flex-shrink-0"
+                            className="bg-gray-800 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition hover:ring-2 hover:ring-blue-500 shrink-0"
                         >
                             V {/* Chữ cái đầu tên người dùng */}
                         </button>

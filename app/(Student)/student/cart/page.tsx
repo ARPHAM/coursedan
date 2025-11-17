@@ -27,7 +27,8 @@ const initialCourses = [
     title: "Lập trình ReactJS từ cơ bản đến nâng cao",
     author: "Bởi Nam Tran",
     imageUrl:
-      "https://miro.medium.com/v2/resize:fit:1200/1*4p1pV-H3phns40B4vCw3_g.jpeg",
+      "https://digitallearning.eletsonline.com/wp-content/uploads/2019/03/Online-courses.jpg",
+  
     rating: 4.8,
     reviews: 512,
     duration: "9 giờ 15 phút",
@@ -66,7 +67,7 @@ export default function CartPage() {
               Giỏ hàng của bạn đang trống 😢
             </p>
             <Link href="/">
-              <button className="bg-purple-600 text-white font-bold py-3 px-6 rounded-md hover:bg-purple-700 transition">
+              <button className="bg-blue-600 text-white font-bold py-3 px-6 rounded-md hover:bg-blue-700 transition">
                 Tiếp tục mua sắm
               </button>
             </Link>
@@ -85,7 +86,7 @@ export default function CartPage() {
                   className="border-b border-gray-200 py-6 flex flex-col sm:flex-row gap-4"
                 >
                   {/* Ảnh khóa học */}
-                  <div className="w-full sm:w-40 flex-shrink-0">
+                  <div className="w-full sm:w-40 shrink-0">
                     <Image
                       src={course.imageUrl}
                       alt={course.title}
@@ -117,7 +118,7 @@ export default function CartPage() {
 
                   {/* Giá & nút hành động */}
                   <div className="flex flex-row sm:flex-col items-start sm:items-end justify-between gap-4 sm:gap-3">
-                    <p className="text-purple-600 font-bold text-lg">
+                    <p className="text-blue-600 font-bold text-lg">
                       {formatCurrency(course.newPrice)}
                     </p>
 
@@ -126,10 +127,10 @@ export default function CartPage() {
                         onClick={() => handleRemove(course.id)}
                         className="text-sm text-red-600 hover:underline flex items-center gap-1"
                       >
-                        <Trash2 size={16} /> Xóa
+                        <Trash2 size={14} /> Xóa
                       </button>
-                      <button className="text-sm text-purple-600 hover:underline flex items-center gap-1">
-                        <Heart size={16} /> Lưu để mua sau
+                      <button className="text-sm text-blue-600 hover:underline flex items-center gap-1">
+                        <Heart size={14} /> Lưu để mua sau
                       </button>
                     </div>
                   </div>
@@ -140,7 +141,7 @@ export default function CartPage() {
             {/* === THANH TOÁN === */}
             <div className="lg:w-1/3">
               <div className="p-6 border border-gray-200 rounded-md shadow-md bg-gray-50 sticky top-24">
-                <p className="text-gray-600 text-lg">Tổng:</p>
+                <p className="text-black-600 text-lg">Tổng:</p>
                 <p className="text-4xl font-bold text-gray-900 mb-2">
                   {formatCurrency(total)}
                 </p>
@@ -150,7 +151,7 @@ export default function CartPage() {
                 </p>
 
                 <Link href="/checkout">
-                  <button className="w-full bg-purple-600 text-white font-bold py-3 rounded-md mt-4 hover:bg-purple-700 transition-colors">
+                  <button className="w-full bg-blue-600 text-white font-bold py-3 rounded-md mt-4 hover:bg-blue-700 transition-colors">
                     Tiến hành thanh toán
                   </button>
                 </Link>

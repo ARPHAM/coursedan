@@ -15,17 +15,17 @@ export default function Footer({ className }: { className?: string }) {
           <ul className="space-y-2 text-sm">
             {/* BƯỚC 2: Thay thế <a> bằng <Link> */}
             <li>
-              <Link href="/gioi-thieu" className="hover:underline">
+              <Link href="/Introduction" className="hover:underline">
                 Giới thiệu
               </Link>
             </li>
             <li>
-              <Link href="/tuyen-dung" className="hover:underline">
+              <Link href="/Career" className="hover:underline">
                 Tuyển dụng
               </Link>
             </li>
             <li>
-              <Link href="/lien-he" className="hover:underline">
+              <Link href="/Contact" className="hover:underline">
                 Liên hệ
               </Link>
             </li>
