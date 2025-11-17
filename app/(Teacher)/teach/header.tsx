@@ -67,14 +67,14 @@ export default function GlobalHeader() {
             }
             router.replace(`${pathname}?${params.toString()}`);
         }
-    }, [debouncedTerm, pathname, router, searchParams]);
+    }, [debouncedTerm, pathname, router,]);
 
     return (
         <header className="w-full bg-white border-b border-gray-200">
             <div className="max-w-7xl mx-auto flex items-center justify-between px-8 py-3 gap-8">
                 
                 {/* Logo */}
-                <Link href="/" className="text-xl font-bold text-purple-700 whitespace-nowrap">
+                <Link href="/" className="text-2xl font-bold text-blue-600">
                     coursedan
                 </Link>
 
