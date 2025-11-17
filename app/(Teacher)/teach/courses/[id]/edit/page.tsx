@@ -66,7 +66,7 @@ export default function EditCoursePage() {
 
   // === Render ===
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-4">
       <div className="flex items-center gap-2 mb-6">
         <button
           onClick={() => router.back()}
@@ -141,7 +141,7 @@ export default function EditCoursePage() {
           <button
             type="submit"
             disabled={submitCourseMutation.isPending}
-            className="px-5 py-2 bg-black text-white rounded-md hover:bg-gray-800 disabled:opacity-50"
+            className="px-5 py-2 bg-blue text-white rounded-md hover:bg-blue-800 disabled:opacity-50"
           >
             {submitCourseMutation.isPending ? "Đang gửi..." : "Gửi duyệt"}
           </button>
