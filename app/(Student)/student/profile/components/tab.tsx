@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import TabInfo from "./info";
-import InstructorProfilePage from "@/app/(Teacher)/teach/profile/page";
 import ChangePasswordPage from "./changePassword";
 import { useRouter } from "next/navigation";
+import InstructorRegister from "./instructorRegister";
 type Tab = "info" | "registerToTeach" | "forgetPassword" | "logout";
 
 export default function Tab() {
@@ -41,7 +41,7 @@ export default function Tab() {
         </nav>
       </aside>
       {tab === "info" && <TabInfo />}
-      {tab === "registerToTeach" && <InstructorProfilePage />}
+      {tab === "registerToTeach" && <InstructorRegister />}
       {tab === "forgetPassword" && <ChangePasswordPage />}
     </>
   );
