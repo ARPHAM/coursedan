@@ -30,6 +30,22 @@ type TeacherRequestDetail = {
   status: string;
 };
 
+// --- Approved instructors payload ---
+type ApprovedInstructor = {
+  userId: string;
+  email: string;
+  username: string;
+  fullName: string;
+  title: string | null;
+  bio: string | null;
+  experience: string | null;
+  portfolioUrl: string | null;
+  certificate: string | null;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
+};
+
 export default function TeacherRequestsPage() {
   const [requests, setRequests] = useState<TeacherRequest[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -52,6 +68,12 @@ export default function TeacherRequestsPage() {
   const [rejectOpen, setRejectOpen] = useState<boolean>(false);
   const [rejectId, setRejectId] = useState<number | null>(null);
   const [rejectReason, setRejectReason] = useState<string>("");
+
+  // --- Approved instructors state ---
+  const [approved, setApproved] = useState<ApprovedInstructor[]>([]);
+  const [loadingApproved, setLoadingApproved] = useState<boolean>(false);
+  const [approvedError, setApprovedError] = useState<string | null>(null);
+  const [approvedSearch, setApprovedSearch] = useState<string>("");
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -83,6 +105,38 @@ export default function TeacherRequestsPage() {
     };
     fetchRequests();
   }, [page, limit]);
+
+  // Fetch approved instructors
+  const fetchApprovedInstructors = async () => {
+    try {
+      setLoadingApproved(true);
+      setApprovedError(null);
+      const match = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("access_token="));
+      const accessToken = match ? decodeURIComponent(match.split("=")[1]) : undefined;
+
+      const res = await fetch(
+        "https://coursedan-api.onrender.com/api/admin/instructors/approved",
+        {
+          headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
+        }
+      );
+      if (!res.ok) throw new Error(`Failed to load approved instructors (${res.status})`);
+      const data = await res.json();
+      const items: ApprovedInstructor[] = Array.isArray(data) ? data : Array.isArray(data?.items) ? data.items : [];
+      setApproved(items);
+    } catch (err: any) {
+      console.warn("Approved instructors fetch error:", err?.message ?? err);
+      setApprovedError("Không thể tải danh sách giảng viên đã phê duyệt");
+    } finally {
+      setLoadingApproved(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchApprovedInstructors();
+  }, []);
 
   const openDetails = async (id: number) => {
     try {
@@ -145,6 +199,8 @@ export default function TeacherRequestsPage() {
       // Cập nhật lại danh sách: loại khỏi pending
       setRequests((prev) => prev.filter((r) => r.id !== id));
       if (detail?.id === id) setDetailOpen(false);
+      // Sau khi phê duyệt, làm mới danh sách giảng viên đã phê duyệt
+      fetchApprovedInstructors();
       alert(`Đã phê duyệt yêu cầu #${data.requestId} – user được cấp quyền ${data.grantedRole}`);
     } catch (err: any) {
       setApproveError(err?.message ?? "Lỗi khi duyệt");
@@ -338,6 +394,85 @@ export default function TeacherRequestsPage() {
           >
             Sau
           </button>
+        </div>
+      </div>
+
+      {/* --- Approved Instructors Section --- */}
+      <div className="mt-10">
+        <h2 className="text-lg font-semibold mb-3">Giảng viên đã phê duyệt</h2>
+        <div className="bg-white rounded-xl shadow-md p-4 border">
+          <div className="flex items-center gap-3 mb-3">
+            <input
+              type="text"
+              placeholder="Tìm theo tên hoặc email..."
+              value={approvedSearch}
+              onChange={(e) => setApprovedSearch(e.target.value)}
+              className="w-full sm:w-80 border rounded-md px-3 py-2 text-sm"
+            />
+            <div className="text-sm text-gray-600 ml-auto">
+              {approvedError ? (
+                <span className="text-red-600">{approvedError}</span>
+              ) : loadingApproved ? (
+                <span>Đang tải...</span>
+              ) : (
+                <span>Có {approved.length} giảng viên</span>
+              )}
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="py-2 px-3 text-left">Họ tên</th>
+                  <th className="px-3 text-left">Email</th>
+                  <th className="px-3 text-left">Chức danh</th>
+                  <th className="px-3 text-left">Giới thiệu</th>
+                  <th className="px-3 text-left">Cập nhật</th>
+                  <th className="px-3 text-left">Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loadingApproved ? (
+                  <tr>
+                    <td colSpan={6} className="py-6 text-center text-gray-600">Đang tải...</td>
+                  </tr>
+                ) : approvedError ? (
+                  <tr>
+                    <td colSpan={6} className="py-6 text-center text-red-600">{approvedError}</td>
+                  </tr>
+                ) : (
+                  (approved
+                    .filter((it) => {
+                      const q = approvedSearch.trim().toLowerCase();
+                      if (!q) return true;
+                      return (
+                        (it.fullName || "").toLowerCase().includes(q) ||
+                        (it.email || "").toLowerCase().includes(q)
+                      );
+                    }))
+                    .map((it, idx) => (
+                      <tr key={`${it.userId}-${idx}`} className="border-t">
+                        <td className="py-2 px-3">{it.fullName || it.username || "(không tên)"}</td>
+                        <td className="px-3">{it.email}</td>
+                        <td className="px-3">{it.title || "-"}</td>
+                        <td className="px-3 max-w-[380px]">
+                          <span className="block truncate" title={it.bio || ""}>
+                            {(it.bio || "").length > 120 ? `${(it.bio || "").slice(0, 120)}…` : (it.bio || "-")}
+                          </span>
+                        </td>
+                        <td className="px-3">{formatDate(it.updatedAt)}</td>
+                        <td className="px-3">
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                            {it.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

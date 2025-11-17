@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { BarChart3, BookOpenCheck, GraduationCap } from "lucide-react";
+import { BarChart3, BookOpenCheck, GraduationCap, Users } from "lucide-react";
 import Image from "next/image";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -112,6 +112,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const menuItems = [
     { name: "Dashboard", href: "/admin", icon: <BarChart3 className="w-5 h-5" /> },
     { name: "Yêu cầu GV", href: "/admin/teachers", icon: <GraduationCap className="w-5 h-5" /> },
+    { name: "Học viên", href: "/admin/students", icon: <Users className="w-5 h-5" /> },
     { name: "Duyệt khóa học", href: "/admin/courses", icon: <BookOpenCheck className="w-5 h-5" /> },
   ];
 
