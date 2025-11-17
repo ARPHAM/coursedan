@@ -48,12 +48,14 @@ type Lecture = {
   progress: number;
   comment: [
     {
+      commentId: number;
       author: string;
       atTime: string;
       avatar: string;
       content: string;
       reply: [
         {
+          replyId: number;
           author: string;
           atTime: string;
           avatar: string;
@@ -72,7 +74,7 @@ export const useLecture = ({
   lectureId: string;
 }) => {
   return useQuery<Lecture>({
-    queryKey: ["Course", courseId, lectureId],
+    queryKey: ["lecture", courseId, lectureId],
     queryFn: async () => {
       const res = await axios.get(
         `/api/Student/${courseId}/learn/${lectureId}`

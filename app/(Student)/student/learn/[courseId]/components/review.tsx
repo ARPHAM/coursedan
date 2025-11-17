@@ -1,5 +1,4 @@
 "use client";
-import { useQueryState } from "nuqs";
 import { useCourse } from "../_api/queries";
 import Rate from "@/components/ui/rate";
 import { useParams } from "next/navigation";

@@ -9,7 +9,6 @@ import { useQueryState } from "nuqs";
 import { useRouter } from "next/navigation";
 
 export default function SectionCourse({ className }: { className?: string }) {
-  const route = useRouter();
   const params = useParams();
   const id = String(params.courseId);
   const [openSections, setOpenSections] = useState<number[]>([]);
