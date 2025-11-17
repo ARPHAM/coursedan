@@ -48,6 +48,14 @@ export default function CourseApprovalPage() {
   const [approvedError, setApprovedError] = useState<string | null>(null);
   const [approvedDateFilter, setApprovedDateFilter] = useState<string>("");
   const [approvedInstructorFilter, setApprovedInstructorFilter] = useState<string>("");
+  // --- Actions state (approve / reject) ---
+  const [approveLoading, setApproveLoading] = useState<number | null>(null);
+  const [approveError, setApproveError] = useState<string | null>(null);
+  const [rejectOpen, setRejectOpen] = useState<boolean>(false);
+  const [rejectId, setRejectId] = useState<number | null>(null);
+  const [rejectReason, setRejectReason] = useState<string>("");
+  const [rejectLoading, setRejectLoading] = useState<number | null>(null);
+  const [rejectError, setRejectError] = useState<string | null>(null);
 
   // --- Chi tiết khóa học ---
   type CourseDetail = {
@@ -120,6 +128,88 @@ export default function CourseApprovalPage() {
     setDetailOpen(false);
     setDetail(null);
     setDetailError(null);
+  };
+  // --- Approve course ---
+  const approveCourse = async (id: number) => {
+    try {
+      setApproveLoading(id);
+      setApproveError(null);
+      const match = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("access_token="));
+      const accessToken = match ? decodeURIComponent(match.split("=")[1]) : undefined;
+      if (!accessToken) throw new Error("Thiếu token");
+
+      const endpoint = `https://coursedan-api.onrender.com/api/admin/${id}/publish`;
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "text/plain",
+        },
+      });
+      if (!res.ok) throw new Error(`Duyệt thất bại (${res.status})`);
+      const message = await res.text();
+
+      setPendingCourses((prev) => prev.filter((c) => c.id !== id));
+      setPendingTotal((prev) => Math.max(0, prev - 1));
+      if (detail?.id === id) setDetailOpen(false);
+      alert(message || `Đã duyệt khóa học #${id}`);
+    } catch (err: any) {
+      setApproveError(err?.message ?? "Lỗi khi duyệt");
+      alert("Duyệt thất bại: " + (err?.message ?? "Lỗi không xác định"));
+    } finally {
+      setApproveLoading(null);
+    }
+  };
+
+  // --- Reject course ---
+  const openRejectCourse = (id: number) => {
+    setRejectId(id);
+    setRejectReason("");
+    setRejectError(null);
+    setRejectOpen(true);
+  };
+
+  const submitRejectCourse = async () => {
+    if (!rejectId) return;
+    try {
+      setRejectLoading(rejectId);
+      setRejectError(null);
+      const match = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("access_token="));
+      const accessToken = match ? decodeURIComponent(match.split("=")[1]) : undefined;
+      if (!accessToken) throw new Error("Thiếu token");
+
+      const endpoint = `https://coursedan-api.onrender.com/api/admin/${rejectId}/reject`;
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "text/plain",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ reason: rejectReason }),
+      });
+      if (!res.ok) {
+        let detail = "";
+        try { detail = await res.text(); } catch {}
+        throw new Error(`Từ chối thất bại (${res.status})${detail ? ` – ${detail}` : ""}`);
+      }
+      const message = await res.text();
+
+      setPendingCourses((prev) => prev.filter((c) => c.id !== rejectId));
+      setPendingTotal((prev) => Math.max(0, prev - 1));
+      if (detail?.id === rejectId) setDetailOpen(false);
+      setRejectOpen(false);
+      alert(message || `Đã từ chối khóa học #${rejectId} – lý do: ${rejectReason}`);
+    } catch (err: any) {
+      setRejectError(err?.message ?? "Lỗi khi từ chối");
+      alert("Từ chối thất bại: " + (err?.message ?? "Lỗi không xác định"));
+    } finally {
+      setRejectLoading(null);
+    }
   };
 
   // Helper: sanitize url (remove stray backticks)
@@ -310,11 +400,18 @@ export default function CourseApprovalPage() {
 
                 {/* Hai nút duyệt/từ chối */}
                 <div className="flex justify-center gap-3 pt-3">
-                  <button className="flex items-center gap-1 bg-[#00A651] text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-[#009245] transition">
+                  <button
+                    className="flex items-center gap-1 bg-[#00A651] text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-[#009245] transition disabled:opacity-60"
+                    onClick={() => approveCourse(course.id)}
+                    disabled={approveLoading === course.id}
+                  >
                     <CheckCircle className="w-4 h-4" />
-                    Duyệt
+                    {approveLoading === course.id ? "Đang duyệt..." : "Duyệt"}
                   </button>
-                  <button className="flex items-center gap-1 bg-[#E60000] text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-[#CC0000] transition">
+                  <button
+                    className="flex items-center gap-1 bg-[#E60000] text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-[#CC0000] transition"
+                    onClick={() => openRejectCourse(course.id)}
+                  >
                     <XCircle className="w-4 h-4" />
                     Từ chối
                   </button>
@@ -429,6 +526,44 @@ export default function CourseApprovalPage() {
         </div>
       </section>
     </div>
+    {rejectOpen && (
+      <div
+        className="fixed inset-0 z-[60] bg-black/40 flex items-center justify-center"
+        onClick={() => setRejectOpen(false)}
+      >
+        <div
+          className="bg-white w-[min(90vw,560px)] rounded-xl shadow-xl p-5"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="text-lg font-semibold">Từ chối khóa học</h2>
+            <button className="text-gray-600 hover:text-gray-900" onClick={() => setRejectOpen(false)}>Đóng</button>
+          </div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Lý do từ chối</label>
+          <textarea
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            rows={4}
+            placeholder="Nhập lý do..."
+            value={rejectReason}
+            onChange={(e) => setRejectReason(e.target.value)}
+          />
+          {rejectError && (
+            <p className="mt-2 text-sm text-red-600">{rejectError}</p>
+          )}
+          <div className="mt-4 flex justify-end gap-2">
+            <button
+              className="px-4 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-50"
+              onClick={() => setRejectOpen(false)}
+            >Hủy</button>
+            <button
+              className="px-4 py-2 text-sm bg-[#E60000] text-white rounded-md hover:bg-[#CC0000] disabled:opacity-60"
+              onClick={submitRejectCourse}
+              disabled={!rejectReason.trim() || (rejectId !== null && rejectLoading === rejectId)}
+            >{rejectId !== null && rejectLoading === rejectId ? "Đang từ chối..." : "Xác nhận từ chối"}</button>
+          </div>
+        </div>
+      </div>
+    )}
     {detailOpen && (
       <div
         className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center"
@@ -531,12 +666,19 @@ export default function CourseApprovalPage() {
                 </div>
               </div>
 
-              {/* Actions (placeholder) */}
+              {/* Actions */}
               <div className="flex justify-end gap-3 pt-2">
-                <button className="flex items-center gap-1 bg-[#00A651] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-[#009245] transition">
-                  <CheckCircle className="w-4 h-4" /> Duyệt
+                <button
+                  className="flex items-center gap-1 bg-[#00A651] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-[#009245] transition disabled:opacity-60"
+                  onClick={() => detail && approveCourse(detail.id)}
+                  disabled={!detail || approveLoading === detail.id}
+                >
+                  <CheckCircle className="w-4 h-4" /> {approveLoading === detail?.id ? "Đang duyệt..." : "Duyệt"}
                 </button>
-                <button className="flex items-center gap-1 bg-[#E60000] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-[#CC0000] transition">
+                <button
+                  className="flex items-center gap-1 bg-[#E60000] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-[#CC0000] transition"
+                  onClick={() => detail && openRejectCourse(detail.id)}
+                >
                   <XCircle className="w-4 h-4" /> Từ chối
                 </button>
               </div>
