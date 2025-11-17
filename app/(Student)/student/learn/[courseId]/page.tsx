@@ -30,17 +30,7 @@ export default function Page() {
         <div className="flex flex-col md:flex-row md:items-stretch min-h-0">
           <div className="w-full md:w-2/3">
             <div className="w-full aspect-video">
-              {lecture?.data.urlVid ? (
-                <Video
-                  urlVid={lecture?.data.urlVid}
-                  className="w-full h-full"
-                />
-              ) : (
-                <Video
-                  urlVid="https://www.youtube.com/embed/-jV06pqjUUc?si=HMbpnUd7da03v39Q"
-                  className="w-full h-full"
-                />
-              )}
+              <Video className="w-full h-full" />
             </div>
           </div>
 

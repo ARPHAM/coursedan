@@ -60,3 +60,32 @@ export const useReplyComment = () => {
     },
   });
 };
+
+type dataReview = {
+  rating: number;
+  comment: string;
+};
+
+export const useReview = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      courseId,
+      data,
+    }: {
+      courseId: string;
+      data: dataReview;
+    }) => {
+      return axios.post(`/api/Student/${courseId}/review`, {
+        ...data,
+      });
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["course"] });
+    },
+    onError: (e: any) => {
+      toast({ description: "Reply thất bại!", variant: "destructive" });
+    },
+  });
+};
