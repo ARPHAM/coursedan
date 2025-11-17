@@ -7,7 +7,7 @@ import Information from "./components/information";
 import Comment from "./components/comment";
 import Review from "./components/review";
 import { useParams } from "next/navigation";
-import { useCourse, useSection } from "./_api/queries";
+import { useCourse, useLecture, useSection } from "./_api/queries";
 import { useQueryState } from "nuqs";
 
 export default function Page() {
@@ -23,15 +23,18 @@ export default function Page() {
       setLectureId(String(sections.data[0].lectures[0].id));
     }
   }, [lectureId, sections.data, setLectureId]);
-  const course = useCourse(lectureId);
-  if (course.data)
+  const lecture = useLecture({ courseId, lectureId });
+  if (lecture.data)
     return (
       <div className="flex-1 p-4 bg-gray-50">
         <div className="flex flex-col md:flex-row md:items-stretch min-h-0">
           <div className="w-full md:w-2/3">
             <div className="w-full aspect-video">
-              {course.data?.urlVid ? (
-                <Video urlVid={course.data.urlVid} className="w-full h-full" />
+              {lecture?.data.urlVid ? (
+                <Video
+                  urlVid={lecture?.data.urlVid}
+                  className="w-full h-full"
+                />
               ) : (
                 <Video
                   urlVid="https://www.youtube.com/embed/-jV06pqjUUc?si=HMbpnUd7da03v39Q"

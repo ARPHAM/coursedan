@@ -1,13 +1,15 @@
 "use client";
 
-import { useCourse } from "../_api/queries";
+import { useParams } from "next/navigation";
+import { useCourse, useLecture } from "../_api/queries";
 import { useQueryState } from "nuqs";
 
 export default function Comment() {
+  const courseId = useParams().courseId[0];
   const [lectureId] = useQueryState("Lecture");
-  const course = useCourse(lectureId);
+  const lecture = useLecture({ courseId, lectureId });
 
-  if (!course.data) return null;
+  if (!lecture.data) return null;
 
   return (
     <>
@@ -19,7 +21,7 @@ export default function Comment() {
         />
       </div>
       <div className="space-y-4 mt-2">
-        {course.data.comments.map((comment) => (
+        {lecture.data.comment.map((comment) => (
           <div key={comment.atTime} className="border p-3 rounded">
             <div className="flex gap-4">
               <div className="flex rounded-full w-10 h-10 bg-amber-400">

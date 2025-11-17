@@ -17,7 +17,7 @@ export const useCourseInfo = (id: string) => {
   return useQuery<CourseInfoDetail>({
     queryKey: ["ListCategory", id],
     queryFn: async () => {
-      const res = await axios.get(`api/Student/${id}`, {});
+      const res = await axios.get(`api/public/${id}`, {});
       return res.data;
     },
     placeholderData: keepPreviousData,
