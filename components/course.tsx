@@ -1,7 +1,6 @@
 "use client";
 
 import Rate from "@/components/ui/rate";
-import Image from "next/image";
 import Link from "next/link";
 import Money from "./money";
 
@@ -35,10 +34,13 @@ export default function Course({
       }
     >
       <div className="relative h-[150px] w-full overflow-hidden rounded-lg">
-        <Image
-          src="https://digitallearning.eletsonline.com/wp-content/uploads/2019/03/Online-courses.jpg"
+        <img
+          src={
+            data?.imageUrl
+              ? data?.imageUrl
+              : "https://digitallearning.eletsonline.com/wp-content/uploads/2019/03/Online-courses.jpg"
+          }
           alt="Course Banner"
-          fill
           className="object-cover hover:scale-105 transition-transform duration-300"
         />
       </div>

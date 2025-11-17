@@ -41,7 +41,7 @@ export default function Page() {
             </div>
           </div>
 
-          <div className="w-full border-l md:w-1/3 flex flex-col md:overflow-y-auto bg-amber-100 ">
+          <div className="w-full border-l md:w-1/3 flex flex-col md:overflow-y-auto bg-white ">
             <div className="w-full md:h-0">
               <SectionCourse />
             </div>
