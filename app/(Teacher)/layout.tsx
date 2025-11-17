@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 
 // app/(Teacher)/layout.tsx
-import {Suspense} from 'react';
 export default function TeacherGroupLayout({
   children,
 }: {
