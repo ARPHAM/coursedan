@@ -48,11 +48,11 @@ export default function Information() {
 
 
     return (
-        <div className="mt-6 space-y-10">
+        <div className="mt-6 space-y-3">
             
             {/* === 1. TIÊU ĐỀ & MÔ TẢ === */}
             <section>
-                <h1 className="text-3xl font-extrabold text-gray-900 mb-2">{course.courseTitle}</h1>
+                <h1 className="text-3xl font-extrabold text-gray-700 mb-2">{course.courseTitle}</h1>
                 <p className="text-lg text-gray-600 mb-4">{info.description}</p>
                 
                 {/* Rating và Số lượng học viên */}
@@ -87,7 +87,7 @@ export default function Information() {
                             {initial}
                         </div>
                         <div>
-                            <p className="font-extrabold text-xl text-blue-500 hover:text-blue-600 cursor-pointer">{course.instructor.name}</p>
+                            <p className="font-bold text-xl text-blue-500 hover:text-blue-600 cursor-pointer">{course.instructor.name}</p>
                             <p className="text-sm text-gray-600 font-semibold">{course.instructor.title}</p>
                         </div>
                     </div>

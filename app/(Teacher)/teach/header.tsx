@@ -72,16 +72,16 @@ export default function GlobalHeader() {
   }, [debouncedTerm, pathname, router]);
 
   return (
-    <header className="w-full bg-white border-b border-gray-200">
+    <header className="w-full bg-blue-900 border-b border-gray-200">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-8 py-3 gap-8">
         {/* Logo */}
-        <Link href="/" className="text-2xl font-bold text-blue-600">
+        <Link href="/" className="text-2xl font-bold text-white">
           coursedan
         </Link>
 
         {/* Ô tìm kiếm */}
         <div className="flex-1 max-w-2xl relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-200 w-5 h-5" />
           <input
             type="text"
             placeholder="Tìm kiếm nội dung bất kỳ"
@@ -92,29 +92,29 @@ export default function GlobalHeader() {
         </div>
 
         {/* Navigation & Icons */}
-        <nav className="flex items-center gap-5 text-sm font-medium text-gray-700 shrink-0">
+        <nav className="flex items-center gap-5 text-sm font-medium text-white shrink-0">
           {/* Các liên kết */}
           <Link
             href="/teach/dashboard"
-            className="hover:text-black whitespace-nowrap px-2"
+            className="hover:text-white whitespace-nowrap px-2"
           >
             Dashboard
           </Link>
           <Link
             href="/teach"
-            className="hover:text-black whitespace-nowrap px-2"
+            className="hover:text-white whitespace-nowrap px-2"
           >
             Khóa học của tôi
           </Link>
           <Link
             href="/teach/create"
-            className="hover:text-black whitespace-nowrap px-2"
+            className="hover:text-white whitespace-nowrap px-2"
           >
             Tạo khóa học
           </Link>
 
           {/* Icons */}
-          <button className="hover:text-black p-1">
+          <button className="hover:text-white p-1">
             <ShoppingCart className="w-6 h-6" />
           </button>
 
