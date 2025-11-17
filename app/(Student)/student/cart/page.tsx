@@ -97,7 +97,7 @@ export default function CartPage() {
                   </div>
 
                   {/* Thông tin khóa học */}
-                  <div className="flex-grow">
+                  <div className="grow">
                     <h3 className="font-bold text-lg">{course.title}</h3>
                     <p className="text-sm text-gray-600">{course.author}</p>
 
