@@ -32,7 +32,7 @@ export default function SectionCourse({ className }: { className?: string }) {
             return (
               <li key={section.id}>
                 <div
-                  className="flex justify-between items-center p-4 border rounded-lg cursor-pointer bg-gray-300 hover:bg-gray-400 transition"
+                  className="flex justify-between items-center p-4 border rounded-lg cursor-pointer bg-gray-200 hover:bg-gray-400 transition"
                   onClick={() => toggleSection(section.id)}
                 >
                   <div className="flex flex-col">
