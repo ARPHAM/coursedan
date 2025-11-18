@@ -8,7 +8,7 @@ import { useParams } from "next/navigation";
 
 export default function InputReview() {
   const [comment, setComment] = useState("");
-  const [star, setStar] = useState(5);
+  const [star, setStar] = useState(0);
   const courseId = useParams().courseId[0];
   const newReview = useReview();
 
