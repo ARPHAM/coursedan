@@ -29,7 +29,7 @@ export default function Review() {
                 </div>
                 <div className="flex flex-col gap-1 w-full">
                   <div className="font-bold">{review.author}</div>
-                  <Rate value={1} />
+                  <Rate value={review.rating || 5} />
                 </div>
               </div>
               <div className="text-[16px]">{review.content}</div>

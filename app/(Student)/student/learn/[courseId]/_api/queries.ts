@@ -24,6 +24,7 @@ type Course = {
       atTime: string;
       avatar: string;
       content: string;
+      rating: number;
       reply: string[];
     }
   ];

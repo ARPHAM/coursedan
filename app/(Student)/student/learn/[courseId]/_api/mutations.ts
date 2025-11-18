@@ -82,7 +82,7 @@ export const useReview = () => {
       });
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: ["course"] });
+      queryClient.invalidateQueries({ queryKey: ["Course"] });
     },
     onError: (e: any) => {
       toast({ description: "Reply thất bại!", variant: "destructive" });
